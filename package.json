@@ -1,0 +1,16 @@
+{
+  "name": "kofia-job-calendar",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "refresh:jobs": "node scripts/refresh-kofia-jobs.mjs",
+    "refresh:jobs:dry": "node scripts/refresh-kofia-jobs.mjs --dry-run",
+    "test": "node --test",
+    "check": "node --check src/app.js && node --check src/agent-tools.js && node --check src/agent-runtime.js && node --check src/agent-worker.js && node --check src/job-utils.js && node --check scripts/kofia-parser.mjs && node --check scripts/refresh-kofia-jobs.mjs && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

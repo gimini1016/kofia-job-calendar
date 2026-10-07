@@ -1,0 +1,57 @@
+name: Update KOFIA jobs
+
+on:
+  schedule:
+    # 00:17 UTC = 09:17 Asia/Seoul. 정각 혼잡을 피해 실행합니다.
+    - cron: "17 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-kofia-jobs
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install project metadata
+        run: npm ci --ignore-scripts
+
+      - name: Refresh public KOFIA postings
+        run: npm run refresh:jobs
+
+      - name: Validate generated data and site
+        run: npm run check
+
+      - name: Commit changed snapshot
+        id: commit
+        run: |
+          if git diff --quiet -- src/jobs.js; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/jobs.js
+          git commit -m "data: refresh KOFIA jobs"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Write update summary
+        run: |
+          echo "## KOFIA 채용공고 자동 확인" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 데이터 변경: ${{ steps.commit.outputs.changed }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 확인 시각: $(date -u '+%Y-%m-%d %H:%M UTC')" >> "$GITHUB_STEP_SUMMARY"
