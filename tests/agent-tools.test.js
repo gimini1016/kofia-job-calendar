@@ -9,6 +9,7 @@ import {
   inferProfileFromText,
   searchJobsTool,
 } from "../src/agent-tools.js";
+import { capstones } from "../src/capstones.js";
 
 test("Agent 채용 검색은 실제 KOFIA 공고와 원문 URL만 반환한다", () => {
   const result = searchJobsTool({ query: "금융 데이터", roleGroup: "data", limit: 5 });
@@ -62,4 +63,16 @@ test("호환 모드도 실제 공고와 12주 계획을 반환한다", () => {
   assert.equal(result.plan.length, 6);
   assert.ok(result.jobEvidence.every((job) => job.sourceUrl.includes("kofia.or.kr")));
   assert.deepEqual(called, ["search_jobs", "analyze_job_trends", "compare_capstones", "build_portfolio_plan"]);
+});
+
+test("삼정KPMG 공식 회신의 일정·근무지·채용 조건을 표시한다", () => {
+  const kpmg = capstones.find((project) => project.id === "kpmg");
+  assert.equal(kpmg.company, "삼정KPMG");
+  assert.match(kpmg.briefing.stage, /10\/12/);
+  assert.match(kpmg.briefing.workstyle, /판교/);
+  assert.match(kpmg.briefing.workstyle, /역삼/);
+  assert.match(kpmg.briefing.data, /다른 AI 프로젝트/);
+  assert.equal(kpmg.briefing.hiringLevel, "warn");
+  assert.match(kpmg.briefing.hiringDetail, /졸업\(예정\)/);
+  assert.match(kpmg.briefing.risk, /10월 14일/);
 });
