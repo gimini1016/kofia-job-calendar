@@ -1,9 +1,206 @@
-export const DATA_SNAPSHOT_DATE = "2026-10-08";
+export const DATA_SNAPSHOT_DATE = "2026-10-09";
 export const KOFIA_BOARD_URL = "https://www.kofia.or.kr/brd/m_96/list.do?multi_itm_seq=0";
 
-// KOFIA 회원사 채용안내를 2026-10-08에 자동 확인한 공개 공고 스냅샷입니다.
+// KOFIA 회원사 채용안내를 2026-10-09에 자동 확인한 공개 공고 스냅샷입니다.
 // 지원 전 반드시 sourceUrl의 원문을 다시 확인하세요.
 export const jobs = [
+  {
+    "id": "kofia-42603",
+    "company": "토스증권",
+    "title": "[토스증권] Overseas Operations Specialist",
+    "startDate": "2026-10-08",
+    "endDate": null,
+    "postedDate": "2026-10-08",
+    "experience": "unknown",
+    "employment": "계약직",
+    "roles": [
+      "운용지원",
+      "주식",
+      "채권"
+    ],
+    "location": "미기재",
+    "summary": "[합류하게 될 팀에 대해 알려드려요] 토스증권 Overseas Operations Specialist는 Overseas Service Manager, Overseas Operations Manager와 함께 Overseas Operations Team에 속해 있어요. Overseas Operations Team의 목표는 신속한 장애 대응과 ‘고객에게 미친 만족감을 주는’ 해외주식 및 해외 금융상품 운영으로 토스증권이 해외주식 최상위 증권사를 유지하는 것이에요. [합류하면 함께 할 업무예요] - 해외주식 장애 시 빠른 해결을 위해 브로커 및 유관부서와 커뮤니케이션을 담당하고, 해외주식 종목, 권리, 장 운영 등을 관리해요. - 해외주식 관련 고객 상담과 더불어 국내주식 상담, 기본적인 업무 처리도 담당하고 있어요. - 해외주식뿐 아니라 해외금융상품(채권, 옵션 등)에 대한 업무 처리도 담당해요. [이런 분과 함께하고 싶어요] - 해외주식 거래 경험이 있으신 분이 필요해요. - 해외 여행 및 금융거래에 결격 사유가 없으신",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42603",
+    "applyUrl": "http://toss.im/_m/twDhkghB",
+    "deadlineUnknown": true,
+    "status": "마감일 미정",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42602",
+    "company": "브라이트자산운용",
+    "title": "[브라이트자산운용㈜] 운용지원팀 채용 공고",
+    "startDate": "2026-10-08",
+    "endDate": null,
+    "postedDate": "2026-10-08",
+    "experience": "career",
+    "employment": "미분류",
+    "roles": [
+      "회계",
+      "펀드회계",
+      "운용지원",
+      "자산운용",
+      "주식"
+    ],
+    "location": "서울시 영등포구 국제금융로10, Three IFC 44층",
+    "summary": "당사는 ‘최고의 투자가치를 창출하여 고객을 빛나게 하자’는 Vision으로 2018년에 설립되었습니다. 이후 2019년 투자일임업 진출, 2022년 일반사모집합투자업으로 확장함으로써 안정적인 경영을 유지하며 다양한 영역에서 전문성을 확보하고 있는 당사와 함께 성장할 인재를 채용하오니 많은 관심과 지원 바랍니다. 1. 채용분야 및 담당업무 1) 채용분야 : 운용지원 0명(주임급) 2) 담당업무 - 공모주 수요예측 참여, 청약, 납입 등 - 대외기관 요청자료 대응 및 정기/비정기 공시 업무 - 펀드회계(설정/해지/결산/분배 등) 및 오퍼레이션(결제/운용지시 등) - 펀드관련 대내외 자료 및 유관기관 보고서 작성 - PBS, 판매사 계약 관련 업무 - 주식매매 및 펀드운용, 관련 기타 제반 업무(행정 및 관리지원) 2. 자격요건 및 우대사항 - 학력, 성별 제한없음 - 해외여행에 결격사유가 없는 자 - 자산운용사/투자일임사/투자자문사 운용지원 관련 업무 경력자 우대 - 금융투자협회 운용지원인력 양성과정 수료자 우대 - 투자",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42602",
+    "applyUrl": "http://brightinvest.co.kr/",
+    "deadlineUnknown": true,
+    "status": "마감일 미정",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42601",
+    "company": "미래에셋자산운용",
+    "title": "[미래에셋자산운용] 디지털마케팅부문 마케팅지원팀 신입(정규직 전환형 인턴사원) 채용",
+    "startDate": "2026-10-08",
+    "endDate": "2026-10-21",
+    "postedDate": "2026-10-08",
+    "experience": "new",
+    "employment": "정규직",
+    "roles": [
+      "자산운용",
+      "주식",
+      "데이터",
+      "AI",
+      "마케팅"
+    ],
+    "location": "본사 (서울시 종로구 - 그랑서울)",
+    "summary": "1. 회사 미래에셋자산운용 2. Job Position 디지털마케팅부문 마케팅지원팀 신입(정규직 전환형 인턴사원) 3. 담당할 업무 · 미래에셋자산운용 및 TIGER ETF 홈페이지 등 디지털 플랫폼 기획·운영 · 홈페이지 방문자 퍼널 분석 및 퇴직연금 RA 관련 데이터 분석 · 마케팅 부문 내 업무 자동화·효율화 기획 및 운영 4. 필요한 경험과 역량 [꼭 필요해요] · 학사 학위 또는 동등한 수준 이상의 학위 보유자(27년 2월 졸업예정자) [이런 역량이 있다면 더욱 좋아요] · 투자자산운용사 등 금융관련 자격증 보유자 선호 · 업무 수행에 필요한 어학(영어) 능력 보유자 · 주식 및 자산운용업에 대한 이해도 우수자 선호 5. 함께 생각해요 · 미래에셋자산운용은 “원칙을 지키는 투자”라는 철학을 가지고 고객의 성공적 자산운용에 기여합니다. · 미래에셋자산운용 디지털마케팅부문 마케팅지원팀은 당사 홈페이지 및 TIGER ETF 등 주요 디지털 플랫폼을 기획·운영하고, 데이터와 기술을 활용하여 고객 경험과 업무 프로세스",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42601",
+    "applyUrl": "http://career.miraeasset.com/job_posting/Nx3Pvroj",
+    "deadlineUnknown": false,
+    "status": "진행중",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42600",
+    "company": "밸류시스템자산운용",
+    "title": "[밸류시스템자산운용] 운용지원팀 경력직 채용공고(~10/18 연장)",
+    "startDate": "2026-10-08",
+    "endDate": "2026-10-18",
+    "postedDate": "2026-10-08",
+    "experience": "career",
+    "employment": "미분류",
+    "roles": [
+      "회계",
+      "운용지원",
+      "자산운용",
+      "트레이딩",
+      "IT"
+    ],
+    "location": "서울시 강남구 영동대로 114길 35(삼성동)",
+    "summary": "㈜밸류시스템자산운용에서 함께 일할 직원을 모집합니다. 저희는 2009년부터 설립되어 투자자문사(2012) -> 전문사모운용사(2016) -> 공모펀드운용사(2023) 까지 차근차근 수탁고와 실적을 쌓아 성장하였습니다. 현재 7500억 수준의 수탁고를 운용하고 있으며 당사와 함께 성장할 인재를 찾고자 합니다. ■ 모집부문: 운용지원팀 0명(사원~대리급) ■ 업무내용: - 집합투자기구의 오퍼레이션 및 관련 보고 업무 - 펀드 운용지시 및 신탁회계 등 제반업무 - 대내 외 보고 및 공시 업무 등 ■ 지원자격 및 우대사항: &shy;- 펀드/일임 트레이딩 업무 경험자 우대 - 금융 및 회계 관련 자격증 소지자 우대 - 자본시장과 금융투자업에 관한 법률상 결격 사유가 없는 자 - 해외 여행에 결격 사유가 없는 자 ■ 지원방법 1. 전형절차 : 서류전형 → 면접전형(1 차 서류전형 합격자에 한하여 개별통지) 2. 제출서류 : 이력서 (희망연봉 or 현재연봉 기재) 및 경력기술서 -> 자유양식 3. 제출방법 : recruit@va",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42600",
+    "applyUrl": "http://www.valuesystem.co.kr/",
+    "deadlineUnknown": false,
+    "status": "진행중",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42599",
+    "company": "미래에셋자산운용",
+    "title": "[미래에셋자산운용] 전주사무소 투자솔루션부문(기관마케팅) 지원 경력 채용",
+    "startDate": "2026-10-08",
+    "endDate": "2026-10-21",
+    "postedDate": "2026-10-08",
+    "experience": "career",
+    "employment": "계약직",
+    "roles": [
+      "자산운용",
+      "주식",
+      "채권",
+      "마케팅"
+    ],
+    "location": "전주사무소 (전주시 덕진구 오공로 144)",
+    "summary": "1. 회사 미래에셋자산운용 2. Job Position 전주사무소 투자솔루션부문(기관마케팅) 지원 경력 채용 3. 담당할 업무 - 국민연금 등 기관 마케팅 지원 - 전주 사무소 운영 및 행정 전반 - 서울 본사 및 전주사무소간 원활한 업무 연계 지원 등 4. 필요한 경험과 역량 [꼭 필요해요] · 학사 학위 또는 동등한 수준 이상의 학위 보유자 · 유관경력 4년 이상 · 전주 사무소 근무자 [이런 역량이 있다면 더욱 좋아요] · 금융투자 관련 자격증 소지자 (투자자산운용사, 투자권유자문인력 등)\" 5. 함께 생각해요 · 미래에셋자산운용은 “원칙을 지키는 투자”라는 철학을 가지고 고객의 성공적 자산운용에 기여합니다. · 미래에셋자산운용 투자솔루션부문은 연기금, 공제회, 금융기관 등에 이르기까지 전문 기관투자자를 위한 투자솔루션을 제공합니다. 당 부문에서는 주식, 채권 등 전통자산과 헤지펀드 등 대체자산에 이르기까지 약 70조 이상의 AUM을 관리하고 있습니다. 업계 최고의 전문성을 갖춘 동료들과 협업하여 자신의 역량을 ",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42599",
+    "applyUrl": "http://career.miraeasset.com/job_posting/2uoXRKTO",
+    "deadlineUnknown": false,
+    "status": "진행중",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42598",
+    "company": "마이다스에셋자산운용",
+    "title": "마이다스에셋자산운용㈜ 기획마케팅본부 채용공고",
+    "startDate": "2026-10-08",
+    "endDate": "2026-10-20",
+    "postedDate": "2026-10-08",
+    "experience": "unknown",
+    "employment": "미분류",
+    "roles": [
+      "자산운용",
+      "데이터",
+      "AI",
+      "마케팅"
+    ],
+    "location": "미기재",
+    "summary": "마이다스에셋자산운용㈜ 기획마케팅본부 채용공고 1. 모집부문 및 자격요건 ▶모집부문:기획마케팅본부 과장 / 차장급 0명 ▶담당업무 - 리테일/연금 펀드 채널 마케팅 (펀드 라인업, 프레젠테이션, 채널 관리, 펀드 사후관리 등) - 제안서, 보고서, 요청자료 등 영업 관련 자료 작성 - 리테일/연금 시장 동향 및 분석 - 기타 마케팅 지원 업무 등 ▶ 지원 자격 - 4년제 대학 졸업자(졸업예정자 포함) 또는 동등 자격 이상 학력 소지자 - 자산운용사, 증권사, 은행 등 펀드 업무 관련 경험 보유자 - 원활한 커뮤니케이션 능력 보유자 - MS Office(PPT, Excel, Word), 한글, AI 활용에 능숙 - 책임감 있고 금융회사 근무에 결격사유가 없는 자 - 남성의 경우 병역 필 또는 면제자 - 해외여행 및 건강 상 결격사유가 없는 자 ▶ 우대 사항 - 보훈대상자 및 장애인 우대 - 투자자산운용사 등 금융 상품 자격증 보유자 우대 2. 조직문화 소개 ▶ 자기주도, 능동적 업무 수행 ▶ 수평적이고 유연한 분위기 3.",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42598",
+    "applyUrl": "http://www.midasasset.com/",
+    "deadlineUnknown": false,
+    "status": "진행중",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42597",
+    "company": "하나은행(구.외환은행)",
+    "title": "[하나은행 투자금융부] 지분투자 경력직 채용",
+    "startDate": "2026-10-08",
+    "endDate": "2026-10-22",
+    "postedDate": "2026-10-08",
+    "experience": "career",
+    "employment": "계약직",
+    "roles": [
+      "인사",
+      "회계",
+      "IB",
+      "주식",
+      "대체투자"
+    ],
+    "location": "미기재",
+    "summary": "1. 소 개 하나은행 투자금융부에서 [지분투자 업무] 부문에 역량 있는 인재를 모집합니다. 2. 채용내용 모집부문 : [경력] 지분투자 모집인원 : 0명 근무부서 : 하나은행 투자금융부(여의도) 담당업무 · LP 출자(PEF, VC) 업무 · 투자대상 발굴(M&A, Pre-IPO, 메자닌, 비상장주식 등) 및 투자전략 수립 · 투자타당성 검토 및 보고서 작성 · 투자에 대한 사후관리 업무 3. 응시자격 기본요건 · 금융기관 인력 채용 상 결격사유가 없는 자 · 해외 여행에 결격 사유가 없는 자(남성의 경우 병역을 마쳤거나 면제된 자) · 기타 당행 내부규정상 채용 결격사유가 없는 자 성별, 학력, 나이 : 제한 없음 필수요건 · 투자관련 업무경력 3년 이상 보유자로 또는 공인회계사로서 M&A, 인수금융 등 경력 보유자 우대요건 · 금융자격증(KICPA, AICPA, CFA, CAIA 등) 보유 · 회계 및 재무 관련 지식 이해도 · 비즈니스 영어 가능 · 투자분야 업계 네트워크 및 정보력을 갖추고 시장에서 관련 딜소싱",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42597",
+    "applyUrl": "http://hanabankhr.career.co.kr/jobs/jobs_view_m.asp?ID=1722",
+    "deadlineUnknown": false,
+    "status": "진행중",
+    "isDemo": false
+  },
+  {
+    "id": "kofia-42596",
+    "company": "하나대체투자자산운용",
+    "title": "[하나대체투자자산운용] 특별자산투자(기업금융, NPL 투자) 경력직 채용 (7년차 이상)",
+    "startDate": "2026-10-08",
+    "endDate": null,
+    "postedDate": "2026-10-08",
+    "experience": "career",
+    "employment": "정규직",
+    "roles": [
+      "경영지원",
+      "인사",
+      "IB",
+      "기업금융",
+      "자산운용",
+      "대체투자"
+    ],
+    "location": "미기재",
+    "summary": "전문지식과 높은 윤리의식을 갖춘 최고의 인재를 모시고자 다음과 같이 공개 모집합니다. ■ 채용분야 : 특별자산투자 (계약직) ■ 담당업무 : 특별자산투자 - 기업금융 (ABL, 인수금융, 메자닌) - NPL 투자 ■ 자격 및 우대사항 - 관련 업무 7년차 이상 - 펀드 조성 및 운용 경력 우대 - 관련 자격증 보유자 우대 (CPA, CFA, 감정평가사 등) ■ 채용절차 및 접수 방법 - 채용절차 : 1차 서류전형, 2차 실무면접, 3차 임원면접 - 지원방법 : 하나대체투자자산운용 채용사이트 지원 hana-aamc.applyin.co.kr ■ 기타 - 계약직으로 1년 근무 후 정규직 전환 여부 검토 - 합격자에 한하여 개별 연락 - 문의사항: 경영지원팀 채용담당자 (sa.an@hanafn.com)",
+    "source": "KOFIA 회원사 채용안내",
+    "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42596",
+    "applyUrl": "http://hana-aamc.applyin.co.kr/",
+    "deadlineUnknown": true,
+    "status": "마감일 미정",
+    "isDemo": false
+  },
   {
     "id": "kofia-42595",
     "company": "에셋플러스자산운용",
@@ -1845,7 +2042,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42520",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -1868,7 +2065,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42518",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -2457,7 +2654,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42493",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -3953,7 +4150,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42427",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -4309,7 +4506,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42412",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -5283,7 +5480,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42368",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -6506,7 +6703,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42306",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -7089,7 +7286,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42277",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
