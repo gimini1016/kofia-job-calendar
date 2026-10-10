@@ -1,7 +1,7 @@
-export const DATA_SNAPSHOT_DATE = "2026-10-09";
+export const DATA_SNAPSHOT_DATE = "2026-10-10";
 export const KOFIA_BOARD_URL = "https://www.kofia.or.kr/brd/m_96/list.do?multi_itm_seq=0";
 
-// KOFIA 회원사 채용안내를 2026-10-09에 자동 확인한 공개 공고 스냅샷입니다.
+// KOFIA 회원사 채용안내를 2026-10-10에 자동 확인한 공개 공고 스냅샷입니다.
 // 지원 전 반드시 sourceUrl의 원문을 다시 확인하세요.
 export const jobs = [
   {
@@ -1780,7 +1780,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42531",
     "applyUrl": "http://www.midasasset.com/",
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -4828,7 +4828,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42398",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -5080,7 +5080,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42385",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
@@ -8391,7 +8391,7 @@ export const jobs = [
     "sourceUrl": "https://www.kofia.or.kr/brd/m_96/view.do?seq=42144",
     "applyUrl": null,
     "deadlineUnknown": false,
-    "status": "진행중",
+    "status": "마감",
     "isDemo": false
   },
   {
