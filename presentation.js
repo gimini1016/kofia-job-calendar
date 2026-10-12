@@ -39,9 +39,15 @@ function renderDataset() {
     if (isClosingSoon(job, today)) result.closing += 1;
     return result;
   }, { open: 0, closing: 0, unknown: 0, closed: 0 });
+  const detailCount = jobs.filter((job) => job.detailAvailable && job.fullText).length;
+  const exactDeadlineCount = jobs.filter((job) => job.deadlineAt).length;
+  const applyUrlCount = jobs.filter((job) => job.applyUrl).length;
 
   document.querySelectorAll("[data-job-count]").forEach((element) => { element.textContent = jobs.length; });
   document.querySelectorAll("[data-capstone-count]").forEach((element) => { element.textContent = capstones.length; });
+  document.querySelectorAll("[data-detail-count]").forEach((element) => { element.textContent = detailCount; });
+  document.querySelectorAll("[data-exact-deadline-count]").forEach((element) => { element.textContent = exactDeadlineCount; });
+  document.querySelectorAll("[data-apply-url-count]").forEach((element) => { element.textContent = applyUrlCount; });
   document.querySelectorAll("[data-snapshot-date]").forEach((element) => { element.textContent = formatDate(DATA_SNAPSHOT_DATE); });
   document.querySelectorAll("[data-open-count]").forEach((element) => { element.textContent = counts.open; });
   document.querySelectorAll("[data-closing-count]").forEach((element) => { element.textContent = counts.closing; });
