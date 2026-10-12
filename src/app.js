@@ -36,16 +36,19 @@ const state = {
 };
 
 const elements = {
-  heroTrack: document.querySelector("#hero-track"),
-  heroProjectCompany: document.querySelector("#hero-project-company"),
-  heroProjectTitle: document.querySelector("#hero-project-title"),
-  heroProjectScore: document.querySelector("#hero-project-score"),
-  heroProjectReason: document.querySelector("#hero-project-reason"),
   heroJobCount: document.querySelector("#hero-job-count"),
   heroSnapshotDate: document.querySelector("#hero-snapshot-date"),
+  heroOpenCount: document.querySelector("#hero-open-count"),
+  heroClosingCount: document.querySelector("#hero-closing-count"),
+  heroUnknownCount: document.querySelector("#hero-unknown-count"),
+  heroTotalCount: document.querySelector("#hero-total-count"),
+  heroSearchForm: document.querySelector("#hero-search-form"),
+  heroSearchInput: document.querySelector("#hero-search-input"),
+  quickFilters: document.querySelectorAll("[data-quick-role], [data-quick-experience]"),
   metricJobCount: document.querySelector("#metric-job-count"),
-  metricBackofficeCount: document.querySelector("#metric-backoffice-count"),
-  metricCareerCount: document.querySelector("#metric-career-count"),
+  metricOpenCount: document.querySelector("#metric-open-count"),
+  metricClosingCount: document.querySelector("#metric-closing-count"),
+  metricSavedCount: document.querySelector("#metric-saved-count"),
   agentJobCount: document.querySelector("#agent-job-count"),
   trendJobCount: document.querySelector("#trend-job-count"),
   footerSnapshotDate: document.querySelector("#footer-snapshot-date"),
@@ -86,9 +89,9 @@ const elements = {
   jobStatusHelp: document.querySelector("#job-status-help"),
   statusButtons: document.querySelectorAll("[data-job-status]"),
   statusOpenCount: document.querySelector("#status-open-count"),
+  statusClosingCount: document.querySelector("#status-closing-count"),
   statusUnknownCount: document.querySelector("#status-unknown-count"),
   statusClosedCount: document.querySelector("#status-closed-count"),
-  statusAllCount: document.querySelector("#status-all-count"),
   resultSummary: document.querySelector("#result-summary"),
   calendarGrid: document.querySelector("#calendar-grid"),
   calendarView: document.querySelector("#calendar-view"),
@@ -100,7 +103,14 @@ const elements = {
   dialogClose: document.querySelector("#dialog-close"),
   menuButton: document.querySelector("#menu-button"),
   mainNav: document.querySelector("#main-nav"),
+  navCalendar: document.querySelector("[data-nav-calendar]"),
+  navSaved: document.querySelector("[data-nav-saved]"),
 };
+
+const main = document.querySelector("#main-content");
+const matchSection = document.querySelector("#match");
+main.insertBefore(document.querySelector("#jobs"), matchSection);
+main.insertBefore(document.querySelector("#trends"), matchSection);
 
 function loadSavedIds() {
   try {
@@ -303,12 +313,6 @@ function renderProjectMatcher() {
   elements.rankingLabel.textContent = `${track.label} 프로젝트 순위`;
   elements.toggleProjects.textContent = state.showAllProjects ? "상위 5개만 보기 −" : "14개 모두 보기 +";
 
-  elements.heroTrack.textContent = track.shortLabel;
-  elements.heroProjectCompany.textContent = top.company;
-  elements.heroProjectTitle.textContent = top.title;
-  elements.heroProjectScore.textContent = top.scores[state.track];
-  elements.heroProjectReason.textContent = top.strength;
-
   elements.topPick.innerHTML = `
     <span class="pick-badge">BEST MATCH · ${escapeHtml(track.shortLabel)}</span>
     <p class="pick-company">${escapeHtml(top.company)}</p>
@@ -370,22 +374,26 @@ function renderPortfolio() {
 }
 
 function renderStats() {
-  elements.openCount.textContent = jobs.filter((job) => isOpen(job, today)).length;
-  elements.closingCount.textContent = jobs.filter((job) => isClosingSoon(job, today)).length;
-  elements.unknownCount.textContent = jobs.filter((job) => !job.endDate).length;
-  elements.savedCount.textContent = state.savedIds.size;
+  const openCount = jobs.filter((job) => isOpen(job, today)).length;
+  const closingCount = jobs.filter((job) => isClosingSoon(job, today)).length;
+  const unknownCount = jobs.filter((job) => !job.endDate).length;
+  const savedCount = state.savedIds.size;
+  [elements.openCount, elements.heroOpenCount, elements.metricOpenCount]
+    .forEach((element) => { element.textContent = openCount; });
+  [elements.closingCount, elements.heroClosingCount, elements.metricClosingCount]
+    .forEach((element) => { element.textContent = closingCount; });
+  [elements.unknownCount, elements.heroUnknownCount]
+    .forEach((element) => { element.textContent = unknownCount; });
+  [elements.savedCount, elements.metricSavedCount]
+    .forEach((element) => { element.textContent = savedCount; });
 }
 
 function renderDatasetSummary() {
   const formattedSnapshot = DATA_SNAPSHOT_DATE.replaceAll("-", ".");
-  const backofficeCount = filterJobs(jobs, { roleGroup: "backoffice" }).length;
-  const careerCount = jobs.filter((job) => ["career", "both"].includes(job.experience)).length;
-  [elements.heroJobCount, elements.metricJobCount, elements.agentJobCount, elements.trendJobCount]
+  [elements.heroJobCount, elements.heroTotalCount, elements.metricJobCount, elements.agentJobCount, elements.trendJobCount]
     .forEach((element) => { element.textContent = jobs.length; });
   [elements.heroSnapshotDate, elements.footerSnapshotDate]
     .forEach((element) => { element.textContent = formattedSnapshot; });
-  elements.metricBackofficeCount.textContent = backofficeCount;
-  elements.metricCareerCount.textContent = careerCount;
 }
 
 function baseFilteredJobs() {
@@ -400,6 +408,7 @@ function baseFilteredJobs() {
 
 function jobsForSelectedAvailability(filteredJobs) {
   if (state.availability === "all") return filteredJobs;
+  if (state.availability === "closing") return filteredJobs.filter((job) => isClosingSoon(job, today));
   return filteredJobs.filter((job) => jobAvailability(job, today) === state.availability);
 }
 
@@ -409,14 +418,15 @@ function renderAvailabilityTabs(filteredJobs) {
     return result;
   }, { open: 0, unknown: 0, closed: 0 });
   elements.statusOpenCount.textContent = counts.open;
+  elements.statusClosingCount.textContent = filteredJobs.filter((job) => isClosingSoon(job, today)).length;
   elements.statusUnknownCount.textContent = counts.unknown;
   elements.statusClosedCount.textContent = counts.closed;
-  elements.statusAllCount.textContent = filteredJobs.length;
   elements.statusButtons.forEach((button) => {
     button.setAttribute("aria-selected", String(button.dataset.jobStatus === state.availability));
   });
   elements.jobStatusHelp.textContent = {
     open: "마감일이 오늘 이후로 확인된 공고만 보여줍니다. 마감이 가까운 순서입니다.",
+    closing: "오늘부터 7일 이내 마감하는 공고입니다. 지원 전에 원문에서 일시와 제출 방법을 확인하세요.",
     unknown: "상시채용·채용 시 마감일 수 있으므로 지원 전에 KOFIA 원문을 확인하세요.",
     closed: "최근 마감된 순서입니다. 직무와 우대사항 트렌드를 참고하는 아카이브로 활용하세요.",
     all: "지원 가능, 마감일 미정, 마감 공고를 한 번에 검색합니다.",
@@ -461,7 +471,8 @@ function renderCalendar(filteredJobs) {
 }
 
 function renderList(filteredJobs) {
-  const sortedJobs = sortJobsForAvailability(filteredJobs, state.availability, today);
+  const sortAvailability = state.availability === "closing" ? "open" : state.availability;
+  const sortedJobs = sortJobsForAvailability(filteredJobs, sortAvailability, today);
   const visibleJobs = sortedJobs.slice(0, state.listLimit);
 
   if (!visibleJobs.length) {
@@ -479,11 +490,7 @@ function renderList(filteredJobs) {
     .map((job) => {
       const isSaved = state.savedIds.has(job.id);
       return `
-        <article class="list-item list-item--${jobAvailability(job, today)}">
-          <div class="deadline-block">
-            <strong>${job.endDate ? escapeHtml(formatKoreanDate(job.endDate)) : "상시·미정"}</strong>
-            <small>${escapeHtml(deadlineLabel(job.endDate, today))}</small>
-          </div>
+        <article class="list-item list-item--${jobAvailability(job, today)}${isClosingSoon(job, today) ? " list-item--urgent" : ""}" data-job-id="${escapeHtml(job.id)}">
           <div class="job-info">
             <p>${escapeHtml(job.company)}</p>
             <h3>${escapeHtml(job.title)}</h3>
@@ -493,8 +500,12 @@ function renderList(filteredJobs) {
               ${job.roles.slice(0, 3).map((role) => `<span class="tag">${escapeHtml(role)}</span>`).join("")}
             </div>
           </div>
+          <div class="deadline-block">
+            <small>${escapeHtml(deadlineLabel(job.endDate, today))}</small>
+            <strong>${job.endDate ? escapeHtml(formatKoreanDate(job.endDate)) : "상시·미정"}</strong>
+          </div>
           <div class="list-actions">
-            <button class="detail-button" type="button" data-job-id="${escapeHtml(job.id)}">상세 보기</button>
+            <button class="detail-button" type="button" data-job-id="${escapeHtml(job.id)}" aria-label="${escapeHtml(job.title)} 상세 보기">보기</button>
             <button
               class="save-button"
               type="button"
@@ -526,10 +537,16 @@ function renderJobs() {
 
   elements.resultSummary.textContent = state.view === "calendar"
     ? `${year}년 ${month + 1}월 마감 ${monthJobs.length}건 · 마감일 미정 공고는 목록에서 확인`
-    : `${({ open: "지원 가능", unknown: "마감일 미정", closed: "마감 공고", all: "전체" })[state.availability]} ${listJobs.length}건 · 마지막 자동 확인 ${DATA_SNAPSHOT_DATE}`;
+    : `${({ open: "지원 가능", closing: "마감 임박", unknown: "마감일 미정", closed: "마감 공고", all: "전체" })[state.availability]} ${listJobs.length}건 · 마지막 자동 확인 ${DATA_SNAPSHOT_DATE}`;
 
   elements.savedFilter.setAttribute("aria-pressed", String(state.savedOnly));
   elements.savedFilter.querySelector("span").textContent = state.savedOnly ? "★" : "☆";
+  elements.quickFilters.forEach((button) => {
+    const selected = button.dataset.quickRole
+      ? state.roleGroup === button.dataset.quickRole
+      : state.experience === button.dataset.quickExperience;
+    button.setAttribute("aria-pressed", String(selected));
+  });
   renderAvailabilityTabs(filteredJobs);
   renderStats();
   renderCalendar(filteredJobs);
@@ -613,8 +630,34 @@ elements.toggleProjects.addEventListener("click", () => {
 
 elements.searchInput.addEventListener("input", (event) => {
   state.query = event.currentTarget.value;
+  elements.heroSearchInput.value = state.query;
   state.listLimit = 18;
   renderJobs();
+});
+
+elements.heroSearchForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  state.query = elements.heroSearchInput.value.trim();
+  elements.searchInput.value = state.query;
+  state.listLimit = 18;
+  state.view = "list";
+  setView("list");
+  document.querySelector("#jobs").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+elements.quickFilters.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (button.dataset.quickRole) {
+      state.roleGroup = state.roleGroup === button.dataset.quickRole ? "all" : button.dataset.quickRole;
+      elements.roleFilter.value = state.roleGroup;
+    } else {
+      state.experience = state.experience === button.dataset.quickExperience ? "all" : button.dataset.quickExperience;
+      elements.experienceFilter.value = state.experience;
+    }
+    state.listLimit = 18;
+    setView("list");
+    document.querySelector("#jobs").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 });
 
 elements.roleFilter.addEventListener("change", (event) => {
@@ -673,6 +716,11 @@ document.addEventListener("click", (event) => {
   const projectButton = event.target.closest("[data-project-id]");
   const projectDetailButton = event.target.closest("[data-project-detail]");
   const agentProjectButton = event.target.closest("[data-agent-project]");
+  if (saveButton) {
+    event.stopPropagation();
+    toggleSaved(saveButton.dataset.saveId);
+    return;
+  }
   if (projectButton) {
     state.selectedProjectId = projectButton.dataset.projectId;
     renderProjectMatcher();
@@ -692,10 +740,6 @@ document.addEventListener("click", (event) => {
     }
   }
   if (jobButton) openJobDialog(jobButton.dataset.jobId);
-  if (saveButton) {
-    event.stopPropagation();
-    toggleSaved(saveButton.dataset.saveId);
-  }
 });
 
 elements.dialogClose.addEventListener("click", () => elements.dialog.close());
@@ -712,6 +756,20 @@ elements.menuButton.addEventListener("click", () => {
 elements.mainNav.addEventListener("click", () => {
   elements.mainNav.dataset.open = "false";
   elements.menuButton.setAttribute("aria-expanded", "false");
+});
+
+elements.navCalendar.addEventListener("click", (event) => {
+  event.preventDefault();
+  setView("calendar");
+  document.querySelector("#jobs").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+elements.navSaved.addEventListener("click", (event) => {
+  event.preventDefault();
+  state.savedOnly = true;
+  state.listLimit = 18;
+  setView("list");
+  document.querySelector("#jobs").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
 elements.agentPrompts.forEach((button) => {

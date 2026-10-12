@@ -94,7 +94,11 @@ export function filterJobs(jobs, filters = {}) {
     const matchesQuery = !query || searchable.includes(query);
     const matchesExperience = !filters.experience || filters.experience === "all"
       ? true
-      : job.experience === filters.experience;
+      : filters.experience === "new"
+        ? ["new", "both"].includes(job.experience)
+        : filters.experience === "career"
+          ? ["career", "both"].includes(job.experience)
+          : job.experience === filters.experience;
     const groupRoles = ROLE_GROUPS[filters.roleGroup];
     const matchesRoleGroup = !groupRoles
       || job.roles.some((role) => groupRoles.some((keyword) => role.includes(keyword)));

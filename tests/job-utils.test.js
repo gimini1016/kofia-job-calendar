@@ -78,6 +78,12 @@ test("검색, 경력 조건, 관심 공고를 함께 필터링한다", () => {
   );
 });
 
+test("신입·경력 공고는 신입과 경력 빠른 필터 양쪽에 포함한다", () => {
+  const mixed = { ...sampleJobs[0], id: "4", experience: "both" };
+  assert.deepEqual(filterJobs([...sampleJobs, mixed], { experience: "new" }).map((job) => job.id), ["1", "4"]);
+  assert.deepEqual(filterJobs([...sampleJobs, mixed], { experience: "career" }).map((job) => job.id), ["2", "3", "4"]);
+});
+
 test("지원 가능·마감일 미정·마감 공고를 구분하고 상태에 맞게 정렬한다", () => {
   const reference = new Date(2026, 9, 7);
   assert.equal(jobAvailability(sampleJobs[0], reference), "closed");

@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="KOFIA 실제 채용공고와 기업설명회로 검증한 14개 캡스톤 프로젝트를 연결한 금융권 커리어 대시보드"
+      content="KOFIA 금융투자회사 채용공고를 지원 상태, 직무, 경력 조건과 마감 달력으로 정리한 채용정보 서비스"
     />
-    <meta name="theme-color" content="#f4f1ea" />
-    <title>Career Portfolio Lab — 금융권 커리어 대시보드</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="theme-color" content="#f8fafc" />
+    <title>금융권 채용 캘린더 — KOFIA 채용공고 모아보기</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&amp;family=Manrope:wght@500;600;700;800&amp;display=swap"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -22,18 +21,17 @@
     <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
 
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Career Portfolio Lab 홈">
-        <span class="brand-mark" aria-hidden="true">C</span>
-        <span><strong>Career Portfolio Lab</strong><small>FINANCE × DATA × OPERATIONS</small></span>
+      <a class="brand" href="#top" aria-label="금융권 채용 캘린더 홈">
+        <span class="brand-mark" aria-hidden="true">K</span>
+        <span><strong>금융권 채용 캘린더</strong><small>KOFIA JOB BOARD</small></span>
       </a>
       <button class="menu-button" id="menu-button" type="button" aria-label="메뉴 열기" aria-expanded="false">메뉴</button>
       <nav class="main-nav" id="main-nav" aria-label="주요 메뉴">
-        <a href="#match">프로젝트 매칭</a>
-        <a href="#briefing">설명회 검증</a>
-        <a href="#agent">AI 에이전트</a>
+        <a href="#jobs">채용공고</a>
+        <a href="#calendar-view" data-nav-calendar>채용 달력</a>
+        <a href="#jobs" data-nav-saved>관심 공고</a>
         <a href="#trends">채용 트렌드</a>
-        <a href="#jobs">실제 공고</a>
-        <a href="#portfolio">포트폴리오</a>
+        <a href="#match">커리어 분석</a>
         <a class="nav-source" href="https://www.kofia.or.kr/brd/m_96/list.do?multi_itm_seq=0" target="_blank" rel="noreferrer">KOFIA 원문 ↗</a>
       </nav>
     </header>
@@ -41,48 +39,56 @@
     <main id="main-content">
       <section class="hero" id="top" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span></span> 2026 CAREER DECISION BOARD</p>
-          <h1 id="hero-title">프로젝트 선택부터<br /><em>금융권 지원까지.</em></h1>
+          <p class="eyebrow"><span></span> KOFIA JOB BOARD · DAILY SNAPSHOT</p>
+          <h1 id="hero-title">금융권 채용공고를<br /><em>한눈에.</em></h1>
           <p class="hero-description">
-            14개 캡스톤 후보와 KOFIA 실제 채용공고 <span id="hero-job-count">278</span>건을 연결했습니다.
-            아직 직무를 정하지 않았어도 관심 트랙을 바꾸며 가장 설득력 있는 경로를 비교할 수 있습니다.
+            흩어진 KOFIA 채용공고 <span id="hero-job-count">278</span>건을 모아
+            지원 상태와 마감일, 직무, 경력 조건별로 빠르게 찾을 수 있게 정리했습니다.
           </p>
-          <div class="hero-actions">
-            <a class="button button--primary" href="#match">내 프로젝트 찾기 <span>→</span></a>
-            <a class="button button--ghost" href="#jobs">실제 공고 보기</a>
+          <form class="hero-search" id="hero-search-form" role="search">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
+            <label class="sr-only" for="hero-search-input">채용공고 검색</label>
+            <input id="hero-search-input" type="search" placeholder="회사명, 직무, 키워드로 검색" />
+            <button type="submit">공고 검색</button>
+          </form>
+          <div class="quick-filters" aria-label="빠른 공고 필터">
+            <button type="button" data-quick-experience="new">신입</button>
+            <button type="button" data-quick-experience="career">경력</button>
+            <button type="button" data-quick-role="backoffice">백오피스</button>
+            <button type="button" data-quick-role="front">운용·투자</button>
+            <button type="button" data-quick-role="data">데이터·IT</button>
           </div>
-          <p class="snapshot-note"><i></i> KOFIA 공고 <span id="hero-snapshot-date">2026.09.30</span> 자동 확인 · 기업설명회 2026.10.02 반영</p>
+          <p class="snapshot-note"><i></i> KOFIA 공개 공고 · <span id="hero-snapshot-date">2026.09.30</span> 마지막 자동 확인</p>
         </div>
-        <aside class="hero-card" aria-label="현재 추천 요약">
+        <aside class="hero-card hero-status-card" aria-label="현재 채용공고 현황">
           <div class="hero-card-top">
-            <span>현재 선택</span>
-            <strong id="hero-track">금융·AI</strong>
+            <span>오늘의 공고 현황</span>
+            <strong>LIVE</strong>
           </div>
-          <div class="recommend-rank">01</div>
-          <p id="hero-project-company">동훈</p>
-          <h2 id="hero-project-title">VC/PE 리서치·규정검증 AI Agent</h2>
-          <div class="score-line">
-            <span>직무 연결 점수</span>
-            <strong id="hero-project-score">91</strong>
+          <div class="hero-status-total">
+            <strong id="hero-open-count">0</strong>
+            <span>지원 가능</span>
           </div>
-          <p class="hero-card-reason" id="hero-project-reason">
-            금융 도메인, AI, 채용연계와 익명화 포트폴리오 권리를 함께 확보할 수 있습니다.
-          </p>
-          <a href="#match">전체 14개 비교 <span>↓</span></a>
+          <div class="hero-status-grid">
+            <div><span>7일 내 마감</span><strong id="hero-closing-count">0</strong></div>
+            <div><span>마감일 미정</span><strong id="hero-unknown-count">0</strong></div>
+            <div><span>전체 수집</span><strong id="hero-total-count">278</strong></div>
+          </div>
+          <a href="#jobs">지원 가능한 공고 보기 <span>↓</span></a>
         </aside>
       </section>
 
       <section class="metrics" aria-label="핵심 데이터">
-        <article><strong id="metric-job-count">278</strong><span>실제 채용공고</span><small>KOFIA 공개 게시물</small></article>
-        <article><strong id="metric-backoffice-count">108</strong><span>백오피스 관련</span><small>경영·회계·운용지원 등</small></article>
-        <article><strong id="metric-career-count">196</strong><span>경력 중심 공고</span><small>경력·신입경력 포함</small></article>
-        <article><strong>14</strong><span>프로젝트 후보</span><small>설명회 12개사 검증</small></article>
+        <article><strong id="metric-job-count">278</strong><span>수집한 공고</span><small>KOFIA 공개 게시물</small></article>
+        <article><strong id="metric-open-count">0</strong><span>지원 가능</span><small>마감일이 남은 공고</small></article>
+        <article><strong id="metric-closing-count">0</strong><span>7일 내 마감</span><small>지금 확인할 공고</small></article>
+        <article><strong id="metric-saved-count">0</strong><span>관심 공고</span><small>이 브라우저에 저장</small></article>
       </section>
 
       <section class="section match-section" id="match" aria-labelledby="match-title">
         <div class="section-heading">
           <div>
-            <p class="section-index">01 · PROJECT MATCH</p>
+            <p class="section-index">03 · CAREER LAB</p>
             <h2 id="match-title">희망 직무가 바뀌면<br />추천 프로젝트도 달라집니다.</h2>
           </div>
           <p>제안서에 10월 2일 설명회 발언을 더해 실제 데이터, 멘토링, 공개 가능한 산출물, 채용 가능성과 리스크를 다시 비교했습니다.</p>
@@ -112,7 +118,7 @@
       <section class="section agent-section" id="agent" aria-labelledby="agent-title">
         <div class="section-heading">
           <div>
-            <p class="section-index">02 · CAREER DECISION AGENT</p>
+            <p class="section-index">04 · CAREER DECISION AGENT</p>
             <h2 id="agent-title">목표를 말하면,<br />Agent가 근거를 찾습니다.</h2>
           </div>
           <p>질문에 바로 답하는 챗봇이 아닙니다. 목표를 해석하고, 필요한 도구를 선택하고, 실제 공고와 설명회 데이터를 관찰한 뒤 추천과 12주 계획을 만듭니다.</p>
@@ -172,7 +178,7 @@
       <section class="section trend-section" id="trends" aria-labelledby="trends-title">
         <div class="section-heading section-heading--light">
           <div>
-            <p class="section-index">03 · HIRING SIGNALS</p>
+            <p class="section-index">02 · HIRING SIGNALS</p>
             <h2 id="trends-title">최신 공고가 말하는<br />채용 신호</h2>
           </div>
           <p><span id="trend-job-count">278</span>개 공고 본문에서 추출한 직무 키워드입니다. 단순 빈도보다 포트폴리오에 어떻게 번역할지가 중요합니다.</p>
@@ -207,8 +213,8 @@
       <section class="section jobs-section" id="jobs" aria-labelledby="jobs-title">
         <div class="section-heading">
           <div>
-            <p class="section-index">04 · LIVE POSTINGS SNAPSHOT</p>
-            <h2 id="jobs-title">실제 공고로<br />내 가설을 검증하세요.</h2>
+            <p class="section-index">01 · JOB POSTINGS</p>
+            <h2 id="jobs-title">지금 지원할 공고를<br />빠르게 찾으세요.</h2>
           </div>
           <p>KOFIA 공개 공고를 매일 자동 확인합니다. 목록은 지원 상태별로 분리하고, 달력에는 마감 기록을 유지합니다. 지원 전에는 반드시 원문에서 최신 상태를 확인하세요.</p>
         </div>
@@ -251,8 +257,8 @@
         <div class="calendar-shell">
           <div class="calendar-header">
             <div class="list-context" id="list-context">
-              <span>JOB STATUS BOARD</span>
-              <strong>지원 상태별 공고</strong>
+              <span>KOFIA 채용공고</span>
+              <strong>지원 상태별로 모아보기</strong>
             </div>
             <div class="month-navigation" id="month-navigation" hidden>
               <button id="previous-month" class="icon-button" type="button" aria-label="이전 달">←</button>
@@ -269,14 +275,14 @@
             <button type="button" role="tab" data-job-status="open" aria-selected="true">
               <span>지원 가능</span><strong id="status-open-count">0</strong><small>마감일 확인됨</small>
             </button>
+            <button type="button" role="tab" data-job-status="closing" aria-selected="false">
+              <span>마감 임박</span><strong id="status-closing-count">0</strong><small>7일 이내</small>
+            </button>
             <button type="button" role="tab" data-job-status="unknown" aria-selected="false">
               <span>마감일 미정</span><strong id="status-unknown-count">0</strong><small>원문 확인 필요</small>
             </button>
             <button type="button" role="tab" data-job-status="closed" aria-selected="false">
               <span>마감 공고</span><strong id="status-closed-count">0</strong><small>트렌드 참고용</small>
-            </button>
-            <button type="button" role="tab" data-job-status="all" aria-selected="false">
-              <span>전체</span><strong id="status-all-count">0</strong><small>통합 검색</small>
             </button>
           </div>
           <p class="job-status-help" id="job-status-help">마감일이 오늘 이후로 확인된 공고만 보여줍니다.</p>
@@ -311,15 +317,15 @@
 
       <section class="closing-cta">
         <div>
-          <p>THE NEXT 12 WEEKS</p>
-          <h2>프로젝트 하나를 고르고,<br />직무 가설을 검증해 보세요.</h2>
+          <p>START WITH THE NEXT OPPORTUNITY</p>
+          <h2>관심 공고를 저장하고,<br />지원 일정을 놓치지 마세요.</h2>
         </div>
-        <a class="button button--light" href="#match">추천 다시 보기 <span>↑</span></a>
+        <a class="button button--light" href="#jobs">공고 다시 보기 <span>↑</span></a>
       </section>
     </main>
 
     <footer>
-      <div class="footer-brand"><strong>Career Portfolio Lab</strong><span>개인 커리어 의사결정을 위한 비상업적 프로젝트</span></div>
+      <div class="footer-brand"><strong>금융권 채용 캘린더</strong><span>KOFIA 공개 공고를 정리한 비상업적 프로젝트</span></div>
       <div class="footer-links">
         <a href="https://www.kofia.or.kr/brd/m_96/list.do?multi_itm_seq=0" target="_blank" rel="noreferrer">KOFIA 채용안내 ↗</a>
         <span>공고 <span id="footer-snapshot-date">2026.09.30</span> 자동 확인 · 설명회 2026.10.02</span>
