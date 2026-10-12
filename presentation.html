@@ -64,26 +64,34 @@
       </section>
 
       <section class="slide" id="slide-2" data-title="문제 정의" data-duration="50" aria-labelledby="slide-2-title">
-        <div class="slide-heading">
-          <p class="slide-index">01 · PROBLEM</p>
-          <h2 id="slide-2-title">공고는 많지만,<br />지원 판단에 필요한 구조가 없습니다.</h2>
-        </div>
-        <div class="problem-layout">
-          <div class="problem-list">
-            <article><span>01</span><div><h3>게시판형 정보</h3><p>회사·직무·경력 조건이 제목과 본문에 흩어져 비교가 어렵습니다.</p></div></article>
-            <article><span>02</span><div><h3>마감 상태 혼재</h3><p>지원 가능, 상시채용, 마감 공고가 함께 노출되어 다시 확인해야 합니다.</p></div></article>
-            <article><span>03</span><div><h3>직무 탐색의 단절</h3><p>공고에서 찾은 역량을 프로젝트와 포트폴리오로 연결하기 어렵습니다.</p></div></article>
+        <div class="slide-heading slide-heading--split">
+          <div>
+            <p class="slide-index">01 · PROBLEM</p>
+            <h2 id="slide-2-title">정보는 충분하지만,<br /><em>탐색 경험</em>은 게시판에 머뭅니다.</h2>
           </div>
-          <div class="before-board" aria-label="기존 탐색 과정">
-            <p>기존 탐색 과정</p>
-            <div><span>KOFIA 목록 확인</span><i>→</i><span>본문 열기</span><i>→</i><span>마감일 메모</span></div>
-            <div><span>직무 분류</span><i>→</i><span>엑셀 비교</span><i>→</i><span>다음 날 반복</span></div>
-            <strong>“공고를 찾는 일”에 시간이 쓰이고 있었습니다.</strong>
+          <p>원문을 없애는 것이 아니라, 지원자가 판단하기 좋은 순서로 다시 구조화하는 것이 출발점이었습니다.</p>
+        </div>
+        <div class="legacy-comparison">
+          <figure class="legacy-shot">
+            <figcaption><strong>KOFIA 원본 공고 상세</strong><span>사용자 제공 화면 · 2026.10.12</span></figcaption>
+            <div class="legacy-shot__viewport">
+              <img src="./assets/presentation/kofia-original-detail.png" alt="표와 긴 텍스트로 구성된 KOFIA 채용공고 원본 상세 화면" />
+              <span class="legacy-callout legacy-callout--date">① 날짜를 다시 해석</span>
+              <span class="legacy-callout legacy-callout--body">② 긴 본문에서 조건 탐색</span>
+            </div>
+          </figure>
+          <div class="friction-stack" aria-label="기존 화면에서 확인한 세 가지 탐색 비용">
+            <article><span>01</span><div><h3>상태를 바로 알기 어렵다</h3><p>지원 가능·마감·마감일 미정 공고를 목록에서 다시 구분해야 합니다.</p></div></article>
+            <article><span>02</span><div><h3>비교 단위가 없다</h3><p>직무·경력·요구역량이 제목과 긴 본문에 흩어져 있습니다.</p></div></article>
+            <article><span>03</span><div><h3>정리를 반복한다</h3><p>공고를 열고 날짜를 해석한 뒤 메모나 엑셀로 다시 옮겨야 합니다.</p></div></article>
+            <div class="friction-loop" aria-label="반복되는 기존 탐색 과정">
+              <span>목록</span><i>→</i><span>상세</span><i>→</i><span>날짜 확인</span><i>→</i><span>재정리</span>
+            </div>
           </div>
         </div>
         <aside class="speaker-notes">
           <strong>권장 시간 · 50초</strong>
-          <p>기존 KOFIA 채용안내는 신뢰할 수 있는 원문이지만 게시판 형태입니다. 회사명, 직무, 경력 조건과 마감일이 제목과 본문에 흩어져 있고, 마감 공고와 지원 가능한 공고도 한 목록에 섞여 있습니다. 사용자는 공고를 하나씩 열고 엑셀이나 메모로 다시 정리해야 합니다. 저는 지원서를 준비하기 전에 공고를 찾고 분류하는 데 반복적으로 시간이 드는 문제를 해결하고자 했습니다.</p>
+          <p>이 화면은 실제 KOFIA 채용공고 상세 페이지입니다. 원문 정보 자체는 충분하지만, 지원자 입장에서는 공고를 하나씩 열어 접수기간을 해석하고, 긴 본문에서 직무와 요구역량을 찾은 다음 메모나 엑셀로 다시 정리해야 합니다. 목록에서도 지원 가능, 마감, 마감일 미정 상태가 바로 구분되지 않습니다. 즉 문제는 정보가 없다는 것이 아니라, 정보 구조가 지원자의 탐색과 비교 행동에 맞지 않는다는 점이었습니다.</p>
         </aside>
       </section>
 
