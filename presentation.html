@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="금융권 채용 캘린더 프로젝트 7분 발표자료" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>금융권 채용 캘린더 — 7분 발표</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./presentation.css" />
+    <script type="module" src="./presentation.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#slide-1">첫 슬라이드로 이동</a>
+
+    <header class="deck-header" aria-label="발표 도구">
+      <a class="deck-brand" href="./index.html" aria-label="금융권 채용 캘린더로 돌아가기">
+        <span aria-hidden="true">K</span>
+        <strong>금융권 채용 캘린더</strong>
+      </a>
+      <div class="deck-tools">
+        <button id="timer-button" type="button" aria-pressed="false" title="타이머 시작 또는 정지 (T)">
+          <span class="live-dot" aria-hidden="true"></span>
+          <time id="timer" datetime="PT0S">00:00</time>
+        </button>
+        <button id="notes-button" type="button" aria-pressed="false" title="발표자 노트 열기 (N)">발표 노트</button>
+        <button id="fullscreen-button" type="button" title="전체 화면 (F)">전체 화면</button>
+      </div>
+    </header>
+
+    <main class="deck" id="deck" aria-live="polite">
+      <section class="slide slide--cover is-active" id="slide-1" data-title="표지" data-duration="30" aria-labelledby="slide-1-title">
+        <div class="cover-grid">
+          <div class="cover-copy">
+            <p class="kicker"><span></span>KOFIA JOB BOARD × CAREER AGENT</p>
+            <h1 id="slide-1-title">금융권 채용공고를<br /><em>찾는 시간</em>을 줄였습니다.</h1>
+            <p class="lead">흩어진 공고를 매일 정리하고, 마감 관리부터 직무·프로젝트 연결까지 한곳에서 지원하는 정보 서비스입니다.</p>
+            <div class="cover-meta">
+              <span>서울대학교 KDT 13기</span>
+              <span>양지민</span>
+              <span>7 MINUTES</span>
+            </div>
+          </div>
+          <aside class="cover-dashboard" aria-label="프로젝트 현황">
+            <div class="cover-dashboard__top"><span>LIVE SNAPSHOT</span><i>자동 갱신</i></div>
+            <strong class="big-number" data-job-count>402</strong>
+            <p>KOFIA 실제 채용공고</p>
+            <div class="cover-stats">
+              <div><strong data-capstone-count>14</strong><span>캡스톤 후보</span></div>
+              <div><strong>20</strong><span>자동 테스트</span></div>
+              <div><strong>0원</strong><span>LLM API 비용</span></div>
+            </div>
+            <small>데이터 기준 <span data-snapshot-date>2026.10.11</span></small>
+          </aside>
+        </div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 30초</strong>
+          <p>안녕하세요. 저는 금융투자협회 채용 게시판의 실제 공고를 매일 정리하고, 취업 준비생이 마감 관리부터 직무 탐색까지 한곳에서 할 수 있는 금융권 채용 캘린더를 만들었습니다. 오늘은 왜 만들었는지, 어떤 방식으로 동작하는지, 그리고 AI Agent가 어떤 역할을 하는지 말씀드리겠습니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-2" data-title="문제 정의" data-duration="50" aria-labelledby="slide-2-title">
+        <div class="slide-heading">
+          <p class="slide-index">01 · PROBLEM</p>
+          <h2 id="slide-2-title">공고는 많지만,<br />지원 판단에 필요한 구조가 없습니다.</h2>
+        </div>
+        <div class="problem-layout">
+          <div class="problem-list">
+            <article><span>01</span><div><h3>게시판형 정보</h3><p>회사·직무·경력 조건이 제목과 본문에 흩어져 비교가 어렵습니다.</p></div></article>
+            <article><span>02</span><div><h3>마감 상태 혼재</h3><p>지원 가능, 상시채용, 마감 공고가 함께 노출되어 다시 확인해야 합니다.</p></div></article>
+            <article><span>03</span><div><h3>직무 탐색의 단절</h3><p>공고에서 찾은 역량을 프로젝트와 포트폴리오로 연결하기 어렵습니다.</p></div></article>
+          </div>
+          <div class="before-board" aria-label="기존 탐색 과정">
+            <p>기존 탐색 과정</p>
+            <div><span>KOFIA 목록 확인</span><i>→</i><span>본문 열기</span><i>→</i><span>마감일 메모</span></div>
+            <div><span>직무 분류</span><i>→</i><span>엑셀 비교</span><i>→</i><span>다음 날 반복</span></div>
+            <strong>“공고를 찾는 일”에 시간이 쓰이고 있었습니다.</strong>
+          </div>
+        </div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 50초</strong>
+          <p>기존 KOFIA 채용안내는 신뢰할 수 있는 원문이지만 게시판 형태입니다. 회사명, 직무, 경력 조건과 마감일이 제목과 본문에 흩어져 있고, 마감 공고와 지원 가능한 공고도 한 목록에 섞여 있습니다. 사용자는 공고를 하나씩 열고 엑셀이나 메모로 다시 정리해야 합니다. 저는 지원서를 준비하기 전에 공고를 찾고 분류하는 데 반복적으로 시간이 드는 문제를 해결하고자 했습니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-3" data-title="해결책" data-duration="50" aria-labelledby="slide-3-title">
+        <div class="slide-heading slide-heading--split">
+          <div><p class="slide-index">02 · SOLUTION</p><h2 id="slide-3-title">첫 화면의 주인공을<br /><em>채용공고</em>로 바꿨습니다.</h2></div>
+          <p>캡스톤과 AI 기능은 없애지 않고, 공고 탐색 이후 사용하는 커리어 분석 도구로 재배치했습니다.</p>
+        </div>
+        <div class="solution-flow" aria-label="서비스 사용 흐름">
+          <article class="solution-card solution-card--primary">
+            <span>PRIMARY</span>
+            <strong>공고 탐색</strong>
+            <p>검색 · 직무 · 경력 · 마감 상태</p>
+          </article>
+          <i aria-hidden="true">→</i>
+          <article class="solution-card">
+            <span>ORGANIZE</span>
+            <strong>일정 관리</strong>
+            <p>달력 · 관심 저장 · 마감 임박</p>
+          </article>
+          <i aria-hidden="true">→</i>
+          <article class="solution-card">
+            <span>UNDERSTAND</span>
+            <strong>채용 트렌드</strong>
+            <p>직무 빈도 · 요구역량 · 백오피스</p>
+          </article>
+          <i aria-hidden="true">→</i>
+          <article class="solution-card">
+            <span>DECIDE</span>
+            <strong>커리어 분석</strong>
+            <p>캡스톤 비교 · Agent · 12주 계획</p>
+          </article>
+        </div>
+        <div class="principle-row">
+          <span>3초 안에</span>
+          <strong>무슨 사이트인지</strong>
+          <strong>몇 건을 지원할 수 있는지</strong>
+          <strong>어디서 검색하는지</strong>
+        </div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 50초</strong>
+          <p>그래서 사이트의 중심을 다시 설계했습니다. 첫 화면에서는 사이트의 목적, 지원 가능한 공고 수, 검색창이 바로 보입니다. 사용자는 먼저 공고를 찾고 달력과 관심 저장으로 관리합니다. 그 다음 채용 트렌드를 확인하고, 필요할 때 캡스톤 비교와 AI Agent를 사용합니다. 즉 채용 캘린더가 주 기능이고, AI와 캡스톤 분석은 차별화 기능입니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-4" data-title="핵심 기능" data-duration="55" aria-labelledby="slide-4-title">
+        <div class="slide-heading slide-heading--split">
+          <div><p class="slide-index">03 · JOB EXPERIENCE</p><h2 id="slide-4-title">사용자는 지금 지원할 공고부터 봅니다.</h2></div>
+          <p>마감 공고를 삭제하지 않고 별도 아카이브로 남겨 채용 트렌드 분석에도 활용합니다.</p>
+        </div>
+        <div class="ui-demo">
+          <div class="ui-search"><span aria-hidden="true">⌕</span><p>회사명, 직무, 키워드로 검색</p><button type="button" tabindex="-1">공고 검색</button></div>
+          <div class="ui-tabs">
+            <div class="is-selected"><span>지원 가능</span><strong data-open-count>0</strong><small>마감일 확인됨</small></div>
+            <div><span>마감 임박</span><strong data-closing-count>0</strong><small>7일 이내</small></div>
+            <div><span>마감일 미정</span><strong data-unknown-count>0</strong><small>원문 확인 필요</small></div>
+            <div><span>마감 공고</span><strong data-closed-count>0</strong><small>트렌드 참고용</small></div>
+          </div>
+          <div class="ui-job-row">
+            <div><span>에픽투자일임</span><strong>국내외 주식 리서치 채용공고</strong><p><i>신입·경력</i><i>리서치</i><i>기업분석</i><i>AI</i></p></div>
+            <div class="ui-deadline"><span>D-25</span><small>11월 6일</small></div>
+            <button type="button" tabindex="-1">☆</button>
+          </div>
+        </div>
+        <div class="feature-strip"><span>검색·필터</span><span>상태 분리</span><span>월간 달력</span><span>관심 저장</span><span>KOFIA 원문 연결</span></div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 55초</strong>
+          <p>공고 목록은 지원 가능, 7일 내 마감, 마감일 미정, 마감 공고로 분리했습니다. 제목과 회사, 핵심 조건, D-day를 우선 보여주고 상세 설명은 별도 창에서 확인합니다. 공고 전체 행을 클릭하거나 관심 공고로 저장할 수 있고, 달력에서는 마감일을 월 단위로 볼 수 있습니다. 마감 공고도 삭제하지 않고 채용 요구역량을 분석하는 자료로 유지합니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide slide--dark" id="slide-5" data-title="데이터 자동화" data-duration="55" aria-labelledby="slide-5-title">
+        <div class="slide-heading slide-heading--split">
+          <div><p class="slide-index">04 · DATA PIPELINE</p><h2 id="slide-5-title">사람이 복사하지 않아도<br />공고가 갱신됩니다.</h2></div>
+          <p>공개 게시판에 과도한 요청을 보내지 않도록 하루 한 번, 신규·최근 공고 중심으로 확인합니다.</p>
+        </div>
+        <div class="pipeline" aria-label="자동 수집 파이프라인">
+          <article><span>01</span><strong>KOFIA 확인</strong><p>목록·신규 상세</p></article>
+          <i>→</i>
+          <article><span>02</span><strong>정규화</strong><p>회사·기간·직무</p></article>
+          <i>→</i>
+          <article><span>03</span><strong>검증</strong><p>중복·누락·건수</p></article>
+          <i>→</i>
+          <article><span>04</span><strong>자동 테스트</strong><p>현재 20개</p></article>
+          <i>→</i>
+          <article><span>05</span><strong>Vercel 배포</strong><p>GitHub 연동</p></article>
+        </div>
+        <div class="pipeline-facts">
+          <div><strong>09:17</strong><span>매일 한국시간 자동 실행</span></div>
+          <div><strong>3중</strong><span>중복·필수값·건수 감소 방어</span></div>
+          <div><strong>최소</strong><span>원문 전체가 아닌 메타데이터 중심</span></div>
+          <div><strong>0</strong><span>현재 별도 서버·LLM API 사용료</span></div>
+        </div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 55초</strong>
+          <p>데이터는 GitHub Actions가 매일 오전 9시 17분에 확인합니다. 목록에서 새로운 게시물을 찾고 회사명, 접수기간, 직무, 원문 URL을 정규화합니다. 기존 공고와 중복을 제거하고, 건수가 갑자기 줄거나 필수값이 빠지면 데이터를 덮어쓰지 않고 실패하도록 만들었습니다. 테스트를 통과한 경우에만 GitHub에 반영되고 Vercel이 자동 배포합니다. 별도 유료 서버나 LLM API는 사용하지 않습니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-6" data-title="직무 연결 점수" data-duration="80" aria-labelledby="slide-6-title">
+        <div class="slide-heading slide-heading--split">
+          <div><p class="slide-index">05 · EXPLAINABLE MATCH</p><h2 id="slide-6-title">96점은 확률이 아니라<br /><em>직무 연결 지수</em>입니다.</h2></div>
+          <div class="score-definition"><strong>NOT</strong><span>합격 확률 · 기업 평가 · AI 예측값</span></div>
+        </div>
+        <div class="score-layout">
+          <article class="score-card">
+            <div><span>BEST MATCH · 백오피스</span><strong>96</strong></div>
+            <p>유진한일합섬 · 영업·생산·수익성 최적화</p>
+            <div class="score-meter"><i></i></div>
+            <small>제안서·설명회·추가 회신에 근거한 상대적 적합도</small>
+          </article>
+          <div class="rubric-grid">
+            <article><span>01</span><div><strong>업무 직접성</strong><p>영업 → 생산 → 재고 → 마진 의사결정</p></div></article>
+            <article><span>02</span><div><strong>역량 연결성</strong><p>손익·KPI·프로세스·보고·자동화</p></div></article>
+            <article><span>03</span><div><strong>데이터·KPI</strong><p>ERP 판매·작업지시·가동중단·마진</p></div></article>
+            <article><span>04</span><div><strong>업무환경 노출</strong><p>CEO·전략기획·영업·생산·재무 협업</p></div></article>
+          </div>
+        </div>
+        <div class="score-caution"><strong>별도 위험 관리</strong><span>범위 과다</span><span>ERP 공개 제한</span><span>목표 성과 미검증</span><p>1점 단위의 통계적 차이보다 90점대·80점대의 상대적 순위를 봅니다.</p></div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 1분 20초</strong>
+          <p>직무 연결 점수는 AI가 계산한 취업 확률이 아닙니다. 기업 제안서와 설명회에서 확인한 업무 직접성, 요구 역량, 실제 데이터와 KPI, 관련 조직의 피드백 가능성을 기준으로 만든 상대적 적합도 지수입니다. 유진한일합섬은 ERP 판매·생산·재고·마진 데이터를 사용하고 전략기획 조직, CEO, 영업·생산·재무 담당자가 함께 참여하기 때문에 백오피스 연결성이 높았습니다. 다만 범위가 넓고 ERP 원문 공개가 어렵다는 위험은 점수와 별도로 표시합니다. 따라서 96과 91의 차이를 정밀한 통계 차이로 해석하지 않고 같은 기준에서의 상대적 순위로 사용합니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide" id="slide-7" data-title="AI Agent" data-duration="60" aria-labelledby="slide-7-title">
+        <div class="slide-heading slide-heading--split">
+          <div><p class="slide-index">06 · CAREER AGENT</p><h2 id="slide-7-title">Agent는 답을 꾸미지 않고<br /><em>근거를 찾는 순서</em>를 실행합니다.</h2></div>
+          <p>추천의 최종 결정권은 사용자에게 두고, Agent의 도구는 읽기 전용으로 제한했습니다.</p>
+        </div>
+        <div class="agent-flow" aria-label="AI Agent 실행 구조">
+          <article><span>GOAL</span><strong>“백오피스와 안정성을 우선해 줘”</strong></article>
+          <i>↓</i>
+          <div class="agent-tools">
+            <span>공고 검색</span><span>트렌드 계산</span><span>캡스톤 비교</span><span>12주 계획</span>
+          </div>
+          <i>↓</i>
+          <article class="agent-output"><span>OUTPUT</span><strong>추천 + 공고 원문 + 보완 역량 + 확인할 위험</strong></article>
+        </div>
+        <div class="agent-guardrails">
+          <article><strong>근거 제한</strong><p>실제 로컬 데이터에 있는 회사·URL만 반환</p></article>
+          <article><strong>비용 제한</strong><p>WebGPU 로컬 모델 또는 규칙 기반 호환 모드</p></article>
+          <article><strong>권한 제한</strong><p>지원·전송·수정 없이 읽기 도구만 사용</p></article>
+          <article><strong>사람 검증</strong><p>최종 지원 조건은 반드시 원문에서 확인</p></article>
+        </div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 1분</strong>
+          <p>AI Agent의 역할은 단순 채팅이 아닙니다. 사용자의 목표를 해석하고, 공고 검색, 채용 트렌드 계산, 캡스톤 비교, 12주 계획 도구를 순서대로 호출합니다. 회사명과 공고 URL은 모델이 생성하지 않고 실제 로컬 데이터에서 다시 결합합니다. WebGPU가 있으면 브라우저 안의 경량 모델을 사용하고, 그렇지 않으면 동일한 데이터 도구를 규칙 기반으로 실행합니다. 지원서를 보내거나 데이터를 수정하는 권한은 없고, 최종 판단은 사용자가 원문을 확인한 뒤 내립니다.</p>
+        </aside>
+      </section>
+
+      <section class="slide slide--closing" id="slide-8" data-title="성과와 다음 단계" data-duration="45" aria-labelledby="slide-8-title">
+        <div class="closing-grid">
+          <div>
+            <p class="slide-index">07 · OUTCOME</p>
+            <h2 id="slide-8-title">공고 수집에서 끝나지 않고,<br /><em>지원 판단</em>까지 연결했습니다.</h2>
+            <div class="outcome-stats">
+              <div><strong data-job-count>402</strong><span>실제 공고</span></div>
+              <div><strong data-capstone-count>14</strong><span>프로젝트 비교</span></div>
+              <div><strong>20/20</strong><span>통과한 테스트</span></div>
+            </div>
+            <div class="next-steps"><span>NEXT</span><p>마감 알림 · 개인 캘린더 내보내기 · 사용자 검증을 통한 점수 기준 고도화</p></div>
+          </div>
+          <aside class="closing-link">
+            <span>LIVE SERVICE</span>
+            <strong>kofia-job-calendar<br />.vercel.app</strong>
+            <a href="https://kofia-job-calendar.vercel.app" target="_blank" rel="noreferrer">사이트 열기 ↗</a>
+            <small>질문 감사합니다.</small>
+          </aside>
+        </div>
+        <aside class="speaker-notes">
+          <strong>권장 시간 · 45초</strong>
+          <p>현재 400건 이상의 실제 공고와 14개 캡스톤 후보를 제공하고, 20개의 자동 테스트로 수집과 추천 도구를 검증하고 있습니다. 이 프로젝트의 핵심은 공고를 많이 모으는 것이 아니라, 사용자가 지원 가능한 공고를 먼저 찾고 요구역량과 프로젝트 경험까지 연결해 판단하도록 돕는 것입니다. 다음 단계에서는 마감 알림과 개인 캘린더 내보내기, 사용자 평가를 통한 점수 기준 고도화를 진행하겠습니다. 감사합니다.</p>
+        </aside>
+      </section>
+    </main>
+
+    <aside class="notes-panel" id="notes-panel" aria-label="현재 슬라이드 발표자 노트" aria-hidden="true">
+      <div><span id="notes-title">발표자 노트</span><button id="notes-close" type="button" aria-label="발표자 노트 닫기">×</button></div>
+      <p id="notes-content"></p>
+    </aside>
+
+    <footer class="deck-footer">
+      <div class="progress-track" aria-hidden="true"><i id="progress-bar"></i></div>
+      <div class="slide-meta"><strong id="current-number">01</strong><span>/ 08</span><em id="current-title">표지</em></div>
+      <nav class="deck-nav" aria-label="슬라이드 이동">
+        <button id="previous-button" type="button" aria-label="이전 슬라이드">←</button>
+        <button id="next-button" type="button" aria-label="다음 슬라이드">→</button>
+      </nav>
+      <p class="keyboard-hint">← → 이동 · N 노트 · T 타이머 · F 전체화면</p>
+    </footer>
+  </body>
+</html>

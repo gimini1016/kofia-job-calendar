@@ -53,6 +53,14 @@ npm run dev
 
 브라우저에서 <http://localhost:4173>을 여세요.
 
+7분 발표자료는 <http://localhost:4173/presentation.html>에서 실행됩니다.
+
+- `← / →` 또는 `Space`: 슬라이드 이동
+- `N`: 발표자 노트
+- `T`: 7분 타이머
+- `F`: 전체 화면
+- 브라우저 인쇄 기능: 16:9 PDF 저장
+
 ```bash
 npm run check
 ```
@@ -92,6 +100,9 @@ npx vercel@latest --prod
 .
 ├── index.html
 ├── styles.css
+├── presentation.html
+├── presentation.css
+├── presentation.js
 ├── server.mjs
 ├── vercel.json
 ├── .github/workflows/
