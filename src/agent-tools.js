@@ -70,7 +70,7 @@ function normalizeText(value) {
 }
 
 function searchableJob(job) {
-  return [job.company, job.title, job.summary, job.employment, ...(job.roles || [])]
+  return [job.company, job.title, job.summary, job.employment, ...(job.roles || []), ...(job.skills || [])]
     .join(" ")
     .toLocaleLowerCase("ko-KR");
 }
@@ -110,6 +110,7 @@ function compactJob(job, score = 0) {
     experience: job.experience,
     employment: job.employment,
     roles: (job.roles || []).slice(0, 8),
+    skills: (job.skills || []).slice(0, 8),
     summary: String(job.summary || "").slice(0, 360),
     sourceUrl: job.sourceUrl,
     relevanceScore: score,
@@ -132,10 +133,12 @@ export function searchJobsTool(argumentsValue = {}) {
       const title = normalizeText(job.title);
       const company = normalizeText(job.company);
       const roles = normalizeText((job.roles || []).join(" "));
+      const skills = normalizeText((job.skills || []).join(" "));
       const summary = normalizeText(job.summary);
       const score = terms.reduce((total, term) => total
         + (title.includes(term) ? 5 : 0)
         + (roles.includes(term) ? 4 : 0)
+        + (skills.includes(term) ? 3 : 0)
         + (company.includes(term) ? 3 : 0)
         + (summary.includes(term) ? 1 : 0), 0);
       return { job, score };

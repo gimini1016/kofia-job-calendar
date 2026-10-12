@@ -55,10 +55,23 @@ test("ISO 날짜를 로컬 날짜로 안전하게 변환한다", () => {
 test("마감일까지 남은 날짜와 라벨을 계산한다", () => {
   const reference = new Date(2026, 8, 30, 18, 30);
   assert.equal(daysUntil("2026-10-03", reference), 3);
-  assert.equal(deadlineLabel("2026-09-30", reference), "D-DAY");
+  assert.equal(deadlineLabel("2026-09-30", reference), "오늘 마감");
   assert.equal(deadlineLabel("2026-09-29", reference), "마감");
   assert.equal(daysUntil(null, reference), null);
   assert.equal(deadlineLabel(null, reference), "마감일 미정");
+});
+
+test("마감 시각이 있으면 날짜가 아니라 실제 시각으로 지원 가능 여부를 판단한다", () => {
+  const job = {
+    endDate: "2026-10-12",
+    deadlineAt: "2026-10-12T08:00:00+09:00",
+  };
+  const beforeDeadline = new Date("2026-10-11T22:59:00Z");
+  const afterDeadline = new Date("2026-10-11T23:01:00Z");
+  assert.equal(jobAvailability(job, beforeDeadline), "open");
+  assert.equal(jobAvailability(job, afterDeadline), "closed");
+  assert.equal(deadlineLabel(job.endDate, beforeDeadline, job.deadlineAt), "오늘 마감");
+  assert.equal(deadlineLabel(job.endDate, afterDeadline, job.deadlineAt), "마감");
 });
 
 test("검색, 경력 조건, 관심 공고를 함께 필터링한다", () => {

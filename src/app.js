@@ -8,6 +8,7 @@ import {
   daysUntil,
   filterJobs,
   formatKoreanDate,
+  formatKoreanDeadline,
   isClosingSoon,
   isOpen,
   jobAvailability,
@@ -501,7 +502,7 @@ function renderList(filteredJobs) {
             </div>
           </div>
           <div class="deadline-block">
-            <small>${escapeHtml(deadlineLabel(job.endDate, today))}</small>
+            <small>${escapeHtml(deadlineLabel(job.endDate, today, job.deadlineAt))}</small>
             <strong>${job.endDate ? escapeHtml(formatKoreanDate(job.endDate)) : "상시·미정"}</strong>
           </div>
           <div class="list-actions">
@@ -561,31 +562,91 @@ function toggleSaved(jobId) {
   if (elements.dialog.open) openJobDialog(jobId);
 }
 
+const JOB_SECTION_LABELS = {
+  overview: "모집 개요",
+  responsibilities: "주요 업무",
+  requirements: "자격 요건",
+  preferred: "우대 사항",
+  workConditions: "근무 조건",
+  application: "지원 방법",
+  process: "채용 절차",
+  notes: "기타 안내",
+};
+
+function renderJobDetailSections(job) {
+  const sections = job.sections || {};
+  const cards = Object.entries(JOB_SECTION_LABELS).flatMap(([key, label]) => {
+    const values = Array.isArray(sections[key]) ? sections[key].filter(Boolean) : [];
+    if (!values.length) return [];
+    return [`
+      <section class="dialog-section dialog-section--${escapeHtml(key)}">
+        <h3>${escapeHtml(label)}</h3>
+        <ul>${values.map((value) => `<li>${escapeHtml(value)}</li>`).join("")}</ul>
+      </section>
+    `];
+  });
+
+  if (cards.length) return cards.join("");
+  return `
+    <section class="dialog-section dialog-section--fallback">
+      <h3>공고 요약</h3>
+      <p>${escapeHtml(job.summary || "구조화된 상세 정보가 없어 KOFIA 원문 확인이 필요합니다.")}</p>
+    </section>
+  `;
+}
+
 function openJobDialog(jobId) {
   const job = jobs.find((item) => item.id === jobId);
   if (!job) return;
   const isSaved = state.savedIds.has(job.id);
+  const availability = jobAvailability(job, today);
+  const skills = Array.isArray(job.skills) ? job.skills : [];
+  const hasStructuredDetails = Boolean(job.fullText && Object.keys(job.sections || {}).length);
+  const detailUnavailable = job.detailAvailable === false;
 
   elements.dialogContent.innerHTML = `
     <div class="dialog-body">
-      <p class="dialog-eyebrow">KOFIA ACTUAL POSTING · ${escapeHtml(job.postedDate)}</p>
-      <h2>${escapeHtml(job.title)}</h2>
-      <p class="dialog-company">${escapeHtml(job.company)} · ${escapeHtml(job.location)}</p>
-      <div class="dialog-date">
+      <header class="dialog-heading">
+        <p class="dialog-eyebrow">KOFIA 실제 공고 · 등록 ${escapeHtml(formatKoreanDate(job.postedDate, { year: true }))}</p>
+        <h2>${escapeHtml(job.title)}</h2>
+        <p class="dialog-company">${escapeHtml(job.company)}</p>
+      </header>
+      <section class="dialog-date" aria-label="접수 일정">
         <div>
           <span>접수 기간</span>
           <strong>${escapeHtml(formatKoreanDate(job.startDate))} — ${escapeHtml(formatKoreanDate(job.endDate))}</strong>
+          ${job.deadlineAt ? `<small>정확한 마감 · ${escapeHtml(formatKoreanDeadline(job))}</small>` : ""}
         </div>
-        <strong>${escapeHtml(deadlineLabel(job.endDate, today))}</strong>
+        <strong class="dialog-status dialog-status--${escapeHtml(availability)}">${escapeHtml(deadlineLabel(job.endDate, today, job.deadlineAt))}</strong>
+      </section>
+      <section class="dialog-facts" aria-label="공고 핵심 정보">
+        <div><span>고용형태</span><strong>${escapeHtml(job.employment || "미분류")}</strong></div>
+        <div><span>경력</span><strong>${experienceLabel(job.experience)}</strong></div>
+        <div class="dialog-fact--wide"><span>근무지</span><strong>${escapeHtml(job.location || "미기재")}</strong></div>
+      </section>
+      <section class="dialog-taxonomy" aria-label="직무와 요구 역량">
+        <div><strong>직무</strong><div class="tag-row">${(job.roles || []).map((role) => `<span class="tag tag--role">${escapeHtml(role)}</span>`).join("")}</div></div>
+        ${skills.length ? `<div><strong>요구 역량</strong><div class="tag-row">${skills.map((skill) => `<span class="tag tag--skill">${escapeHtml(skill)}</span>`).join("")}</div></div>` : ""}
+      </section>
+      <div class="dialog-source-note">
+        <strong>${detailUnavailable ? "본문이 이미지 또는 외부 링크로 제공된 공고입니다." : hasStructuredDetails ? "원문을 항목별로 정리했습니다." : "요약 정보만 저장된 공고입니다."}</strong>
+        <span>${detailUnavailable ? "내용을 추측해 채우지 않았습니다. KOFIA 원문에서 상세 조건을 확인하세요." : "자동 분류 결과이므로 지원 전 KOFIA 원문을 반드시 확인하세요."}</span>
       </div>
-      <div class="tag-row">
-        <span class="tag">${experienceLabel(job.experience)}</span>
-        <span class="tag">${escapeHtml(job.employment)}</span>
-        ${job.roles.map((role) => `<span class="tag">${escapeHtml(role)}</span>`).join("")}
+      <div class="dialog-sections">
+        ${renderJobDetailSections(job)}
       </div>
-      <p class="dialog-summary">${escapeHtml(job.summary || "공고 원문에서 상세 업무와 자격요건을 확인하세요.")}</p>
+      ${job.fullText ? `
+        <details class="dialog-raw">
+          <summary>수집된 원문 전체 보기</summary>
+          <div>${escapeHtml(job.fullText)}</div>
+        </details>
+      ` : ""}
       <div class="dialog-actions">
-        <a href="${escapeHtml(job.sourceUrl || KOFIA_BOARD_URL)}" target="_blank" rel="noreferrer">KOFIA 원문 확인 ↗</a>
+        <div class="dialog-action-links">
+          ${job.applyUrl ? `<a class="dialog-apply" href="${escapeHtml(job.applyUrl)}" target="_blank" rel="noreferrer">지원 페이지 ↗</a>` : ""}
+          ${job.applicationEmail ? `<a class="dialog-email" href="mailto:${escapeHtml(job.applicationEmail)}">이메일 지원</a>` : ""}
+          <a href="${escapeHtml(job.sourceUrl || KOFIA_BOARD_URL)}" target="_blank" rel="noreferrer">KOFIA 원문 ↗</a>
+        </div>
         <button
           type="button"
           data-save-id="${escapeHtml(job.id)}"

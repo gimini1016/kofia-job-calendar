@@ -43,7 +43,32 @@ const ROLE_PATTERNS = [
   ["데이터", /데이터|data|sql|분석/gi],
   ["IT", /\bit\b|시스템|개발자|엔지니어|정보보호|보안/gi],
   ["AI", /\bai\b|인공지능|머신러닝|llm/gi],
+  ["퀀트", /quant|퀀트|계량분석|팩터투자/gi],
+  ["ESG", /\besg\b|책임투자|지속가능투자/gi],
   ["마케팅", /마케팅|브랜드|콘텐츠|홍보/gi],
+];
+
+const SKILL_PATTERNS = [
+  ["금융시장 이해", /금융\s*시장|자본시장|거시경제/gi],
+  ["재무·회계", /재무|회계|결산|세무/gi],
+  ["데이터 분석", /데이터|통계|분석|리서치/gi],
+  ["코딩", /코딩|python|파이썬|sql|github|개발/gi],
+  ["AI 활용", /\bai\b|인공지능|머신러닝|llm|클로드|코덱스/gi],
+  ["MS Office", /ms\s*office|ms오피스|엑셀|excel|powerpoint|ppt/gi],
+  ["외국어", /외국어|영어|어학|english/gi],
+  ["금융 자격증", /투자자산운용사|cfa|frm|scr|금융투자분석사|자격증/gi],
+  ["커뮤니케이션", /커뮤니케이션|의사소통|협업/gi],
+];
+
+const SECTION_RULES = [
+  ["responsibilities", /^(?:담당할\s*)?(?:주요\s*)?(?:담당\s*업무|업무\s*내용|수행\s*직무|직무\s*내용|role\s*&?\s*responsibility)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["requirements", /^(?:필수\s*)?(?:지원\s*자격|자격\s*요건|채용\s*요구\s*사항|필수\s*요건|필요\s*역량|응시\s*자격)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["preferred", /^(?:이런\s*역량이\s*있다면\s*더욱\s*좋아요|우대\s*사항|우대\s*조건|우대\s*요건)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["workConditions", /^(?:근무\s*조건|채용\s*조건|고용\s*조건|근무지|근무\s*장소|근무\s*시간|급여|보수|출근\s*일자)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["application", /^(?:접수\s*기간|지원\s*방법|접수\s*방법|제출\s*서류|이력서\s*접수\s*방법|지원서\s*제출)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["process", /^(?:채용\s*단계|채용\s*절차|전형\s*절차|전형\s*방법|면접\s*방식(?:\s*및\s*일시)?)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["overview", /^(?:모집\s*분야(?:\s*및\s*모집\s*인원)?|모집\s*부문|채용\s*부문|모집\s*인원|채용\s*인원|모집\s*개요)\s*(?:[:：-]\s*)?(.*)$/i],
+  ["notes", /^(?:기타\s*사항|유의\s*사항|기\s*타)\s*(?:[:：-]\s*)?(.*)$/i],
 ];
 
 function escapeRegExp(value) {
@@ -135,21 +160,35 @@ function inferExperience(title, body) {
 }
 
 function inferEmployment(title, body) {
-  const text = `${title} ${String(body).slice(0, 1600)}`;
+  if (/파트타임|아르바이트/.test(title)) return "아르바이트";
+  if (/인턴/.test(title)) return "인턴";
+  const text = String(body).slice(0, 1600);
   if (/정규직/.test(text)) return "정규직";
   if (/계약직/.test(text)) return "계약직";
+  if (/파트타임|아르바이트/.test(text)) return "아르바이트";
   if (/인턴/.test(text)) return "인턴";
-  if (/파트타임|아르바이트/.test(text)) return "파트타임";
   return "미분류";
 }
 
-function inferRoles(title, body) {
-  const text = `${title}\n${body}`;
+function inferPatternLabels(text, patterns) {
+  return patterns.filter(([, pattern]) => {
+    pattern.lastIndex = 0;
+    return pattern.test(text);
+  }).map(([label]) => label);
+}
+
+function inferRoles(title, sections) {
+  const text = [title, ...(sections.responsibilities || []), ...(sections.overview || []).slice(0, 3)].join("\n");
   const roles = ROLE_PATTERNS.filter(([, pattern]) => {
     pattern.lastIndex = 0;
     return pattern.test(text);
   }).map(([role]) => role);
   return roles.length ? roles : ["금융일반"];
+}
+
+function inferSkills(sections) {
+  const text = [...(sections.requirements || []), ...(sections.preferred || [])].join("\n");
+  return inferPatternLabels(text, SKILL_PATTERNS);
 }
 
 function inferLocation(body) {
@@ -160,8 +199,88 @@ function inferLocation(body) {
   return city?.[0] || "미기재";
 }
 
-function compactSummary(body) {
-  return String(body).replace(/\s+/g, " ").trim().slice(0, 520);
+function stripLineMarker(value) {
+  return String(value)
+    .replace(/^[▶■□◆●○※*·\-\s]+/, "")
+    .replace(/^\d+\s*[.)]\s*/, "")
+    .trim();
+}
+
+function appendUnique(section, value) {
+  const normalized = stripLineMarker(value);
+  if (!normalized || section.includes(normalized)) return;
+  section.push(normalized);
+}
+
+export function extractDetailSections(body) {
+  const sections = {
+    overview: [],
+    responsibilities: [],
+    requirements: [],
+    preferred: [],
+    workConditions: [],
+    application: [],
+    process: [],
+    notes: [],
+  };
+  let current = "overview";
+
+  String(body).split("\n").map((line) => line.trim()).filter(Boolean).forEach((rawLine) => {
+    const line = stripLineMarker(rawLine);
+    const compositeHeading = /^(?:모집\s*분야\s*및\s*자격\s*요건|채용\s*내용)$/i.test(line);
+    if (compositeHeading) {
+      current = "overview";
+      return;
+    }
+
+    const matchedRule = SECTION_RULES.find(([, pattern]) => pattern.test(line));
+    if (matchedRule) {
+      const [sectionKey, pattern] = matchedRule;
+      pattern.lastIndex = 0;
+      const remainder = line.match(pattern)?.[1]?.trim() || "";
+      current = sectionKey;
+      if (remainder) appendUnique(sections[current], remainder);
+      return;
+    }
+
+    appendUnique(sections[current], line);
+  });
+
+  return Object.fromEntries(Object.entries(sections).filter(([, values]) => values.length));
+}
+
+function inferApplicationEmail(body) {
+  return String(body).match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i)?.[0] || null;
+}
+
+function inferDeadlineAt(body, endDate) {
+  if (!endDate) return null;
+  const [, endMonth, endDay] = endDate.split("-").map(Number);
+  const deadlineLines = String(body).split("\n").filter((line) => (
+    /접수|마감|제출|까지/.test(line)
+    && (line.includes(`${endMonth}월`) || line.includes(String(endDay).padStart(2, "0")) || line.includes(`${endDay}일`))
+  ));
+
+  for (const line of deadlineLines) {
+    if (/자정/.test(line)) return `${endDate}T23:59:59+09:00`;
+    const match = line.match(/(오전|오후)?\s*(\d{1,2})\s*(?::|시)\s*(\d{1,2})?/);
+    if (!match) continue;
+    let hour = Number(match[2]);
+    const minute = Number(match[3] || 0);
+    if (match[1] === "오후" && hour < 12) hour += 12;
+    if (match[1] === "오전" && hour === 12) hour = 0;
+    if (hour > 23 || minute > 59) continue;
+    return `${endDate}T${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00+09:00`;
+  }
+  return null;
+}
+
+function compactSummary(body, limit = 300) {
+  const value = String(body).replace(/\s+/g, " ").trim();
+  if (value.length <= limit) return value;
+  const candidate = value.slice(0, limit + 1);
+  const boundary = candidate.lastIndexOf(" ");
+  return `${candidate.slice(0, boundary > limit * 0.72 ? boundary : limit).trim()}…`;
 }
 
 export function parseDetailPage(html, listing) {
@@ -178,6 +297,7 @@ export function parseDetailPage(html, listing) {
   const applyUrl = rawApplyUrl && !rawApplyUrl.toLowerCase().startsWith("javascript:")
     ? new URL(rawApplyUrl, listing.sourceUrl).href
     : null;
+  const sections = extractDetailSections(body);
 
   return {
     id: `kofia-${listing.seq}`,
@@ -188,12 +308,18 @@ export function parseDetailPage(html, listing) {
     postedDate,
     experience: inferExperience(title, body),
     employment: inferEmployment(title, body),
-    roles: inferRoles(title, body),
+    roles: inferRoles(title, sections),
+    skills: inferSkills(sections),
     location: inferLocation(body),
     summary: compactSummary(body) || title,
+    fullText: body || null,
+    detailAvailable: Boolean(body),
+    sections,
     source: "KOFIA 회원사 채용안내",
     sourceUrl: listing.sourceUrl,
     applyUrl,
+    applicationEmail: inferApplicationEmail(body),
+    deadlineAt: inferDeadlineAt(body, endDate),
     deadlineUnknown: !endDate,
     status: "확인필요",
     isDemo: false,
@@ -202,6 +328,10 @@ export function parseDetailPage(html, listing) {
 
 function statusFor(job, snapshotDate) {
   if (!job.endDate) return "마감일 미정";
+  if (job.deadlineAt) {
+    const exactDeadline = new Date(job.deadlineAt);
+    if (!Number.isNaN(exactDeadline.getTime()) && exactDeadline.getTime() < Date.now()) return "마감";
+  }
   return job.endDate >= snapshotDate ? "진행중" : "마감";
 }
 
@@ -211,7 +341,16 @@ export function mergeJobSnapshots(existingJobs, refreshedJobs, snapshotDate) {
     const update = refreshed.get(job.id);
     refreshed.delete(job.id);
     const next = update ? { ...job, ...update } : { ...job };
-    return { ...next, status: statusFor(next, snapshotDate), deadlineUnknown: !next.endDate };
+    const detailAvailable = typeof next.detailAvailable === "boolean"
+      ? next.detailAvailable
+      : Boolean(next.fullText && (Object.keys(next.sections || {}).length || next.fullText.length > next.title.length));
+    return {
+      ...next,
+      fullText: detailAvailable ? next.fullText : null,
+      detailAvailable,
+      status: statusFor(next, snapshotDate),
+      deadlineUnknown: !next.endDate,
+    };
   });
   refreshed.forEach((job) => merged.push({
     ...job,

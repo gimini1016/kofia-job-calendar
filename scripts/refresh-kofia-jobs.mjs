@@ -19,6 +19,7 @@ const maximumListPages = Number.parseInt(process.env.KOFIA_MAX_LIST_PAGES || "30
 const recentRefreshCount = Number.parseInt(process.env.KOFIA_REFRESH_RECENT_COUNT || "20", 10);
 const maximumNewDetails = Number.parseInt(process.env.KOFIA_MAX_NEW_DETAILS || "150", 10);
 const dryRun = process.argv.includes("--dry-run");
+const backfillAll = process.argv.includes("--backfill-all");
 
 function snapshotDateInSeoul() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -102,6 +103,9 @@ function validateJobs(jobs) {
     if (!job.company || !job.title || !job.sourceUrl?.includes("kofia.or.kr")) {
       throw new Error(`필수 필드가 비어 있습니다: ${job.id}`);
     }
+    if (typeof job.detailAvailable !== "boolean" || (job.detailAvailable && !job.fullText)) {
+      throw new Error(`상세 정보 상태가 올바르지 않습니다: ${job.id}`);
+    }
     ids.add(job.id);
   });
 }
@@ -116,20 +120,40 @@ async function main() {
   }
 
   const detailCandidates = new Map();
+  if (backfillAll) {
+    existingJobs.forEach((job) => {
+      const seq = job.id.match(/^kofia-(\d+)$/)?.[1];
+      if (!seq) return;
+      detailCandidates.set(seq, {
+        seq,
+        company: job.company,
+        title: job.title,
+        postedDate: job.postedDate,
+        sourceUrl: job.sourceUrl,
+      });
+    });
+  }
   [...newListings, ...listings.slice(0, recentRefreshCount)]
     .forEach((listing) => detailCandidates.set(listing.seq, listing));
-  process.stdout.write(`신규 ${newListings.length}건 · 최근 재확인 포함 상세 ${detailCandidates.size}건\n`);
+  process.stdout.write(`신규 ${newListings.length}건 · ${backfillAll ? "전체 상세 보강" : "최근 재확인 포함 상세"} ${detailCandidates.size}건\n`);
 
   const refreshedJobs = [];
+  const failedDetails = [];
   let index = 0;
   for (const listing of detailCandidates.values()) {
     if (index > 0) await wait(requestDelayMs);
-    const html = await fetchText(listing.sourceUrl);
-    const job = parseDetailPage(html, listing);
-    if (!job.title || !job.company || job.summary.length < 5) {
-      throw new Error(`상세 파싱 결과가 불완전합니다: ${listing.sourceUrl}`);
+    try {
+      const html = await fetchText(listing.sourceUrl);
+      const job = parseDetailPage(html, listing);
+      if (!job.title || !job.company || job.summary.length < 5) {
+        throw new Error(`상세 파싱 결과가 불완전합니다: ${listing.sourceUrl}`);
+      }
+      refreshedJobs.push(job);
+    } catch (error) {
+      if (!backfillAll) throw error;
+      failedDetails.push({ id: `kofia-${listing.seq}`, message: error.message });
+      process.stderr.write(`상세 보강 건너뜀 · kofia-${listing.seq} · ${error.message}\n`);
     }
-    refreshedJobs.push(job);
     index += 1;
     if (index % 10 === 0 || index === detailCandidates.size) {
       process.stdout.write(`상세 ${index}/${detailCandidates.size}건 확인\n`);
@@ -144,6 +168,7 @@ async function main() {
     await writeFile(temporaryPath, output, "utf8");
     await rename(temporaryPath, jobsPath);
   }
+  if (failedDetails.length) process.stdout.write(`상세 보강 실패 ${failedDetails.length}건 · 기존 데이터를 보존했습니다.\n`);
   process.stdout.write(`${dryRun ? "검증" : "갱신"} 완료 · ${existingJobs.length} → ${mergedJobs.length}건 · ${snapshotDate}\n`);
 }
 

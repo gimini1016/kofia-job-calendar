@@ -34,11 +34,19 @@ export function daysUntil(dateValue, referenceDate = new Date()) {
   return Math.round((target.getTime() - reference.getTime()) / DAY_IN_MS);
 }
 
-export function deadlineLabel(endDate, referenceDate = new Date()) {
+export function parseISODateTime(value) {
+  if (!value || typeof value !== "string") return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+export function deadlineLabel(endDate, referenceDate = new Date(), deadlineAt = null) {
+  const exactDeadline = parseISODateTime(deadlineAt);
+  if (exactDeadline && referenceDate.getTime() > exactDeadline.getTime()) return "마감";
   const days = daysUntil(endDate, referenceDate);
   if (days === null) return "마감일 미정";
   if (days < 0) return "마감";
-  if (days === 0) return "D-DAY";
+  if (days === 0) return "오늘 마감";
   return `D-${days}`;
 }
 
@@ -47,12 +55,15 @@ export function isOpen(job, referenceDate = new Date()) {
 }
 
 export function jobAvailability(job, referenceDate = new Date()) {
+  const exactDeadline = parseISODateTime(job.deadlineAt);
+  if (exactDeadline) return referenceDate.getTime() <= exactDeadline.getTime() ? "open" : "closed";
   const days = daysUntil(job.endDate, referenceDate);
   if (days === null) return "unknown";
   return days >= 0 ? "open" : "closed";
 }
 
 export function isClosingSoon(job, referenceDate = new Date()) {
+  if (jobAvailability(job, referenceDate) !== "open") return false;
   const days = daysUntil(job.endDate, referenceDate);
   return days !== null && days >= 0 && days <= 7;
 }
@@ -66,6 +77,23 @@ export function formatKoreanDate(value, options = {}) {
     weekday: options.weekday ? "short" : undefined,
     year: options.year ? "numeric" : undefined,
   }).format(date);
+}
+
+export function formatKoreanDeadline(job) {
+  const exactDeadline = parseISODateTime(job?.deadlineAt);
+  if (exactDeadline) {
+    return new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "short",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }).format(exactDeadline);
+  }
+  return formatKoreanDate(job?.endDate, { year: true, weekday: true });
 }
 
 export function buildCalendarDays(year, monthIndex) {
@@ -88,7 +116,7 @@ export function filterJobs(jobs, filters = {}) {
   const savedIds = filters.savedIds || new Set();
 
   return jobs.filter((job) => {
-    const searchable = [job.company, job.title, job.employment, ...job.roles]
+    const searchable = [job.company, job.title, job.employment, ...(job.roles || []), ...(job.skills || [])]
       .join(" ")
       .toLocaleLowerCase("ko-KR");
     const matchesQuery = !query || searchable.includes(query);
@@ -101,7 +129,7 @@ export function filterJobs(jobs, filters = {}) {
           : job.experience === filters.experience;
     const groupRoles = ROLE_GROUPS[filters.roleGroup];
     const matchesRoleGroup = !groupRoles
-      || job.roles.some((role) => groupRoles.some((keyword) => role.includes(keyword)));
+      || (job.roles || []).some((role) => groupRoles.some((keyword) => role.includes(keyword)));
     const matchesSaved = !filters.savedOnly || savedIds.has(job.id);
     const matchesAvailability = !filters.availability || filters.availability === "all"
       ? true
@@ -123,7 +151,7 @@ export function sortByDeadline(jobs) {
     if (!a.endDate && !b.endDate) return (b.postedDate || "").localeCompare(a.postedDate || "");
     if (!a.endDate) return 1;
     if (!b.endDate) return -1;
-    return a.endDate.localeCompare(b.endDate);
+    return (a.deadlineAt || a.endDate).localeCompare(b.deadlineAt || b.endDate);
   });
 }
 
