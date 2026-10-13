@@ -232,27 +232,52 @@
 
       <section class="slide" id="slide-7" data-title="AI Agent" data-duration="60" aria-labelledby="slide-7-title">
         <div class="slide-heading slide-heading--split">
-          <div><p class="slide-index">06 · CAREER AGENT</p><h2 id="slide-7-title">Agent는 답을 꾸미지 않고<br /><em>근거를 찾는 순서</em>를 실행합니다.</h2></div>
-          <p>추천의 최종 결정권은 사용자에게 두고, Agent의 도구는 읽기 전용으로 제한했습니다.</p>
+          <div><p class="slide-index">06 · CAREER AGENT</p><h2 id="slide-7-title">무엇을 묻고,<br /><em>무엇으로 답하는가</em></h2></div>
+          <p>범용 챗봇이 아니라 진로 목표를 이해하고 실제 공고와 설명회 근거를 조사하는 의사결정 Agent입니다.</p>
         </div>
-        <div class="agent-flow" aria-label="AI Agent 실행 구조">
-          <article><span>GOAL</span><strong>“백오피스와 안정성을 우선해 줘”</strong></article>
-          <i>↓</i>
-          <div class="agent-tools">
-            <span>공고 검색</span><span>트렌드 계산</span><span>캡스톤 비교</span><span>12주 계획</span>
-          </div>
-          <i>↓</i>
-          <article class="agent-output"><span>OUTPUT</span><strong>추천 + 공고 원문 + 보완 역량 + 확인할 위험</strong></article>
+        <div class="agent-explainer" aria-label="AI Agent의 질문, 근거, 답변 구조">
+          <article class="agent-stage agent-stage--ask">
+            <span>01 · ASK</span>
+            <h3>직무와 우선순위를 묻습니다</h3>
+            <blockquote>“금융 경영전략, 포트폴리오·안정성 우선”</blockquote>
+            <div class="agent-chip-row"><i>금융</i><i>백오피스</i><i>전략</i><i>재무·회계</i><i>인사·총무</i></div>
+            <small>포트폴리오 · 채용 · 멘토링 · 안정성을 함께 해석</small>
+          </article>
+          <i class="agent-arrow" aria-hidden="true">→</i>
+          <article class="agent-stage agent-stage--evidence">
+            <span>02 · EVIDENCE</span>
+            <h3>실제 데이터를 조사합니다</h3>
+            <div class="agent-evidence-stats">
+              <div><strong data-job-count>0</strong><small>KOFIA 실제 공고</small></div>
+              <div><strong data-capstone-count>14</strong><small>캡스톤 후보</small></div>
+            </div>
+            <div class="agent-chip-row agent-chip-row--tools"><i>공고 검색</i><i>트렌드</i><i>프로젝트 비교</i><i>12주 계획</i></div>
+            <small>제안서 · 10/2 설명회 · 추가 회신으로 확인한 범위만 사용</small>
+          </article>
+          <i class="agent-arrow" aria-hidden="true">→</i>
+          <article class="agent-stage agent-stage--answer">
+            <span>03 · ANSWER</span>
+            <h3>추천과 한계를 같이 줍니다</h3>
+            <ul>
+              <li>상위 3개 프로젝트·상대 점수</li>
+              <li>실제 공고 원문·보완 역량</li>
+              <li>추천 근거·반드시 확인할 위험</li>
+              <li>12주 포트폴리오 실행 계획</li>
+            </ul>
+            <small>합격 확률·실시간 소식을 추측하지 않고 최종 판단은 사람에게 남김</small>
+          </article>
         </div>
-        <div class="agent-guardrails">
-          <article><strong>근거 제한</strong><p>실제 로컬 데이터에 있는 회사·URL만 반환</p></article>
-          <article><strong>비용 제한</strong><p>WebGPU 로컬 모델 또는 규칙 기반 호환 모드</p></article>
-          <article><strong>권한 제한</strong><p>지원·전송·수정 없이 읽기 도구만 사용</p></article>
-          <article><strong>사람 검증</strong><p>최종 지원 조건은 반드시 원문에서 확인</p></article>
+        <div class="agent-loop" aria-label="AI Agent 실행 순환">
+          <strong>AGENT LOOP</strong><span>목표 해석</span><i>→</i><span>도구 선택</span><i>→</i><span>실행</span><i>→</i><span>결과 관찰</span><i>↺</i><span>완료 판단</span>
+        </div>
+        <div class="agent-modes">
+          <p><strong>LOCAL AI</strong> WebGPU 모델이 도구·순서를 선택</p>
+          <p><strong>FALLBACK</strong> 같은 데이터 도구를 고정 순서로 실행</p>
+          <p><strong>READ ONLY</strong> 지원·전송·수정 권한 없음</p>
         </div>
         <aside class="speaker-notes">
           <strong>권장 시간 · 1분</strong>
-          <p>AI Agent의 역할은 단순 채팅이 아닙니다. 사용자의 목표를 해석하고, 공고 검색, 채용 트렌드 계산, 캡스톤 비교, 12주 계획 도구를 순서대로 호출합니다. 회사명과 공고 URL은 모델이 생성하지 않고 실제 로컬 데이터에서 다시 결합합니다. WebGPU가 있으면 브라우저 안의 경량 모델을 사용하고, 그렇지 않으면 동일한 데이터 도구를 규칙 기반으로 실행합니다. 지원서를 보내거나 데이터를 수정하는 권한은 없고, 최종 판단은 사용자가 원문을 확인한 뒤 내립니다.</p>
+          <p>이 Agent에게는 희망 직무와 포트폴리오, 채용, 멘토링, 안정성 같은 우선순위를 물을 수 있습니다. 예를 들어 '금융 경영전략을 희망하고 포트폴리오와 안정성을 중시한다'고 입력하면, Agent가 실제 KOFIA 공고 검색, 채용 트렌드, 14개 캡스톤 비교와 12주 계획 도구를 선택해 실행합니다. 답변은 상위 3개 프로젝트, 실제 공고 원문, 보완 역량, 12주 실행 계획과 추천의 위험을 함께 제공합니다. 회사명·점수·URL은 제안서와 설명회, 공고 데이터에서 다시 결합하며 합격 확률이나 실시간 소식은 추측하지 않습니다. WebGPU가 있으면 로컬 모델이 도구와 순서를 선택하고, 없으면 같은 도구를 고정 순서로 실행하는 호환 모드로 전환합니다.</p>
         </aside>
       </section>
 
