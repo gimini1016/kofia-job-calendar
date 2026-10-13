@@ -97,8 +97,8 @@
 
       <section class="slide" id="slide-3" data-title="해결책" data-duration="50" aria-labelledby="slide-3-title">
         <div class="slide-heading slide-heading--split">
-          <div><p class="slide-index">02 · SOLUTION</p><h2 id="slide-3-title">첫 화면의 주인공을<br /><em>채용공고</em>로 바꿨습니다.</h2></div>
-          <p>캡스톤과 AI 기능은 없애지 않고, 공고 탐색 이후 사용하는 커리어 분석 도구로 재배치했습니다.</p>
+          <div><p class="slide-index">02 · SOLUTION</p><h2 id="slide-3-title">금융권 채용공고를 모아,<br /><em>지원 판단</em>까지 연결합니다.</h2></div>
+          <p>KOFIA 공고를 수집·정리해 지원 가능 여부와 마감 일정을 보여주고, 채용 트렌드와 커리어 분석까지 제공합니다.</p>
         </div>
         <div class="solution-flow" aria-label="서비스 사용 흐름">
           <article class="solution-card solution-card--primary">
@@ -127,13 +127,14 @@
         </div>
         <div class="principle-row">
           <span>3초 안에</span>
-          <strong>무슨 사이트인지</strong>
-          <strong>몇 건을 지원할 수 있는지</strong>
-          <strong>어디서 검색하는지</strong>
+          <strong>최신 공고</strong>
+          <strong>지원 가능 여부</strong>
+          <strong>마감 일정</strong>
+          <strong>원문 링크</strong>
         </div>
         <aside class="speaker-notes">
           <strong>권장 시간 · 50초</strong>
-          <p>그래서 사이트의 중심을 다시 설계했습니다. 첫 화면에서는 사이트의 목적, 지원 가능한 공고 수, 검색창이 바로 보입니다. 사용자는 먼저 공고를 찾고 달력과 관심 저장으로 관리합니다. 그 다음 채용 트렌드를 확인하고, 필요할 때 캡스톤 비교와 AI Agent를 사용합니다. 즉 채용 캘린더가 주 기능이고, AI와 캡스톤 분석은 차별화 기능입니다.</p>
+          <p>이 서비스의 핵심은 금융권 채용공고 탐색입니다. KOFIA 공고를 한곳에 모아 현재 지원 가능한 공고와 마감 일정을 먼저 보여줍니다. 사용자는 검색과 필터로 공고를 찾고, 달력과 관심 저장으로 일정을 관리할 수 있습니다. 이어서 채용 트렌드를 확인하고 캡스톤 비교와 AI Agent를 이용해 자신의 진로와 포트폴리오 방향까지 판단할 수 있습니다. 즉 공고 탐색에서 일정 관리, 시장 이해, 커리어 의사결정으로 이어지는 흐름입니다.</p>
         </aside>
       </section>
 
@@ -188,19 +189,19 @@
           <i>→</i>
           <article><span>03</span><strong>정규화</strong><p>기간·직무·상세</p></article>
           <i>→</i>
-          <article><span>04</span><strong>검증</strong><p>방어 로직 + 24 tests</p></article>
+          <article><span>04</span><strong>자동 검증</strong><p>오류 방지 + 기능 테스트</p></article>
           <i>→</i>
           <article><span>05</span><strong>변경 시 배포</strong><p>Git push → Vercel</p></article>
         </div>
         <div class="pipeline-facts">
           <div><strong>09:17 예약</strong><span>매일 KST 실행 요청 · 시작은 지연 가능</span></div>
           <div><strong>신규 + 최근</strong><span>최근 20건은 상세 내용도 재확인</span></div>
-          <div><strong>24/24</strong><span>중복·필수값·건수 감소를 검증</span></div>
+          <div><strong>24개 모두 통과</strong><span>수집·마감·필터·Agent 기능 검증</span></div>
           <div><strong>0원</strong><span>현재 별도 서버·유료 LLM API 없음</span></div>
         </div>
         <aside class="speaker-notes">
           <strong>권장 시간 · 55초</strong>
-          <p>GitHub Actions에 매일 오전 9시 17분 한국시간으로 실행을 예약했습니다. 다만 GitHub 공유 실행 환경이라 실제 시작 시각은 늦어질 수 있습니다. 실행되면 신규 공고와 최근 20건의 상세를 재확인하고, 회사, 접수기간, 직무, 자격과 우대사항을 정규화합니다. 중복, 필수값 누락, 급격한 건수 감소를 막고 24개 테스트를 통과한 변경만 GitHub에 커밋합니다. 이후 Vercel이 자동 재배포합니다. 수동 실행도 가능하며, 별도 유료 서버나 LLM API는 사용하지 않습니다.</p>
+          <p>GitHub Actions에 매일 오전 9시 17분 한국시간으로 실행을 예약했습니다. 다만 GitHub 공유 실행 환경이라 실제 시작 시각은 늦어질 수 있습니다. 실행되면 신규 공고와 최근 20건의 상세를 재확인하고, 회사, 접수기간, 직무, 자격과 우대사항을 정규화합니다. 이후 공고 수집과 병합, 마감 상태 계산, 검색·필터·달력, Agent의 실제 공고 URL과 추천 결과를 포함한 자동 테스트 24개를 실행합니다. 현재는 24개가 모두 통과한 상태이며, 검증에 성공한 변경만 GitHub에 커밋한 뒤 Vercel이 자동 재배포합니다. 별도 유료 서버나 LLM API는 사용하지 않습니다.</p>
         </aside>
       </section>
 
@@ -290,7 +291,7 @@
               <div><strong data-job-count>402</strong><span>실제 공고</span></div>
               <div><strong data-detail-count>0</strong><span>상세 구조화</span></div>
               <div><strong data-capstone-count>14</strong><span>프로젝트 비교</span></div>
-              <div><strong>24/24</strong><span>통과한 테스트</span></div>
+              <div><strong>24개</strong><span>자동 테스트 모두 통과</span></div>
             </div>
             <div class="next-steps"><span>NEXT</span><p>마감 알림 · 개인 캘린더 내보내기 · 사용자 검증을 통한 점수 기준 고도화</p></div>
           </div>
