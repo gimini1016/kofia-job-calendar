@@ -56,7 +56,7 @@ const motionPlan = {
     [".ui-search", 170],
     [".ui-tabs > div", 300, 80],
     [".ui-job-row", 620],
-    [".ui-detail-preview", 760],
+    [".ui-detail-preview", 760, 0, "motion-fade"],
     [".feature-strip span", 900, 60],
   ],
   "slide-5": [
